@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   websiteTitle = 'Badminton Made Easy';
+  websiteIcon = 'assets/img/badminton-shuttle-icon1.png';
 
   constructor() { }
 

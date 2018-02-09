@@ -20,11 +20,13 @@
       "prefix": "bme",
       "styles": [
         "styles.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.css"
+        "assets/bootstrap/bootstrap-materia-theme.css"
       ],
       "scripts": [
-        "../node_modules/jquery/dist/jquery.min.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.js"
+        "assets/jQuery/jquery.min.js",
+        "assets/bootstrap/tether.min.js",
+        "assets/bootstrap/popper.min.js",
+        "assets/bootstrap/bootstrap.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
