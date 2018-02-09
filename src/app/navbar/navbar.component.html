@@ -1,5 +1,4 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-
   <a class="navbar-brand bme-navbar-header" href="#">
     <img class="img-responsive bme-navbar-icon" [src]="websiteIcon" /> {{websiteTitle}}
   </a>
@@ -11,18 +10,18 @@
   <div class="navbar-collapse collapse" id="navbarColor01">
     <ul class="navbar-nav mr-auto bme-navbar-menu">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home
+        <a class="nav-link" [routerLink]="['/home']">Home
           <span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Wedstrijden</a>
+        <a class="nav-link" [routerLink]="['/matches']">Wedstrijden</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Toernooien</a>
+        <a class="nav-link" [routerLink]="['/tournaments']">Toernooien</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Competities</a>
+        <a class="nav-link" [routerLink]="['/competitions']">Competities</a>
       </li>
     </ul>
     <ul class="navbar-nav bme-navbar-menu">
