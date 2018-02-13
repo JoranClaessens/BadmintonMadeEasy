@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./match-list.component.css']
 })
 export class MatchListComponent implements OnInit {
+  isActive = 'active';
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  changeStyle($event) {
+    this.isActive = $event.type === 'mouseover' ? 'active' : 'none';
   }
 
 }
