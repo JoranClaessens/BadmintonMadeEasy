@@ -8,10 +8,12 @@ import { TournamentListComponent } from './tournaments/tournament-list/tournamen
 import { CompetitionListComponent } from './competitions/competition-list/competition-list.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { AppModule } from './app.module';
+import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'matches', component: MatchListComponent },
+  { path: 'matches/:id', component: MatchDetailComponent },
   { path: 'tournaments', component: TournamentListComponent },
   { path: 'competitions', component: CompetitionListComponent },
   { path: '',   redirectTo: '/home', pathMatch: 'full' },
