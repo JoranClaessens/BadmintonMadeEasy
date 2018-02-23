@@ -1,15 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatchListComponent } from './match-list/match-list.component';
 import { MatchDetailComponent } from './match-detail/match-detail.component';
+import { RouterModule } from '@angular/router';
+import { MatchCreateComponent } from './match-create/match-create.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule,
+    FormsModule
   ],
   declarations: [
     MatchListComponent,
-    MatchDetailComponent
+    MatchDetailComponent,
+    MatchCreateComponent
 ]
 })
 export class MatchModule { }

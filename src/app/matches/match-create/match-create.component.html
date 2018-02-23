@@ -1,0 +1,36 @@
+<div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
+  <h1>Wedstrijd aanmaken</h1>
+  <hr class="my-3">
+  <form>
+    <fieldset>
+      <div class="form-group">
+        <label for="matchType">Type match</label>
+        <select class="form-control" id="matchType" [(ngModel)]="selectedMatchType" name="matchTypes">
+          <option value="NONE" selected>Kies een type...</option>
+          <option value="MEN_SINGLE">Heren enkel</option>
+          <option value="WOMEN_SINGLE">Vrouwen enkel</option>
+          <option value="MEN_DOUBLE">Heren dubbel</option>
+          <option value="WOMEN_DOUBLE">Vrouwen dubbel</option>
+          <option value="MIX">Mix</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="selectedMatchType !== 'NONE'">
+        <label>Spelers</label>
+        <div class="row">
+          <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Speler 1" name="speler1" [(ngModel)]="player1">
+            <input *ngIf="selectedMatchType === 'MEN_DOUBLE' || selectedMatchType === 'WOMEN_DOUBLE' || selectedMatchType === 'MIX'" type="text" class="form-control" placeholder="Speler 3" name="speler3" [(ngModel)]="player3">
+          </div>
+          <div class="col-md-2" style="display: flex; align-items: center; justify-content: center;">
+            VS
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Speler 2" name="speler2" [(ngModel)]="player2">
+            <input *ngIf="selectedMatchType === 'MEN_DOUBLE' || selectedMatchType === 'WOMEN_DOUBLE' || selectedMatchType === 'MIX'" type="text" class="form-control" placeholder="Speler 4" name="speler4" [(ngModel)]="player4">
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" (click)="createMatch()">Opslaan</button>
+    </fieldset>
+  </form>
+</div>

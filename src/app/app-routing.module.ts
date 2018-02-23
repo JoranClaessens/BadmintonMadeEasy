@@ -9,14 +9,16 @@ import { CompetitionListComponent } from './competitions/competition-list/compet
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { AppModule } from './app.module';
 import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
+import { MatchCreateComponent } from './matches/match-create/match-create.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'matches', component: MatchListComponent },
+  { path: 'matches/create', component: MatchCreateComponent },
   { path: 'matches/:id', component: MatchDetailComponent },
   { path: 'tournaments', component: TournamentListComponent },
   { path: 'competitions', component: CompetitionListComponent },
-  { path: '',   redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 
