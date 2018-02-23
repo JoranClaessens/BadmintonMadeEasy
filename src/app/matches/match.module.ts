@@ -5,6 +5,7 @@ import { MatchListComponent } from './match-list/match-list.component';
 import { MatchDetailComponent } from './match-detail/match-detail.component';
 import { RouterModule } from '@angular/router';
 import { MatchCreateComponent } from './match-create/match-create.component';
+import { MatchService } from './match.service';
 
 @NgModule({
   imports: [
@@ -16,6 +17,9 @@ import { MatchCreateComponent } from './match-create/match-create.component';
     MatchListComponent,
     MatchDetailComponent,
     MatchCreateComponent
-]
+  ],
+  providers: [
+    MatchService
+  ]
 })
 export class MatchModule { }
