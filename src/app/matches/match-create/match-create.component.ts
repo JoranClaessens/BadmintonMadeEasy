@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BadmintonMatch } from '../badminton-match';
+import { MatchService } from '../match.service';
 
 @Component({
   selector: 'bme-match-create',
@@ -14,15 +15,20 @@ export class MatchCreateComponent implements OnInit {
   player2: string;
   player3: string;
   player4: string;
+  errorMessage: string;
 
-  constructor() { }
+  constructor(private _matchService: MatchService) { }
 
   ngOnInit() {
   }
 
-  createMatch(): void {
-    this.match = new BadmintonMatch(this.selectedMatchType, this.player1, this.player2, this.player3, this.player4);
-    console.log(this.match);
+  createMatch() {
+    this._matchService.createMatch(new BadmintonMatch(this.selectedMatchType, this.player1, this.player2, this.player3, this.player4))
+      .subscribe(
+        badmintonMatch => {
+          console.log(badmintonMatch);
+        },
+        error => this.errorMessage = <any>error);
   }
 
 }

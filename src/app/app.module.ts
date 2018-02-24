@@ -9,6 +9,7 @@ import { MatchModule } from './matches/match.module';
 import { TournamentModule } from './tournaments/tournament.module';
 import { CompetitionModule } from './competitions/competition.module';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.co
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     MatchModule,
     TournamentModule,
     CompetitionModule

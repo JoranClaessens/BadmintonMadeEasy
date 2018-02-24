@@ -1,3 +1,5 @@
+import { Game } from './game';
+
 export class BadmintonMatch {
     id: number;
     type: string;
@@ -5,6 +7,7 @@ export class BadmintonMatch {
     player2: string;
     player3: string;
     player4: string;
+    games: Game[];
 
     constructor(type: string, player1: string, player2: string, player3: string, player4: string) {
         this.type = type;
