@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatchService } from '../match.service';
+import { BadmintonMatch } from '../badminton-match';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'bme-match-list',
@@ -6,15 +9,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./match-list.component.css']
 })
 export class MatchListComponent implements OnInit {
-  isActive = 'active';
+  // isActive = 'active';
+  matches: BadmintonMatch[];
+  errorMessage: HttpErrorResponse;
 
-  constructor() { }
+  constructor(private _matchService: MatchService) { }
 
   ngOnInit() {
+    this._matchService.getMatches()
+      .subscribe(
+        badmintonMatches => {
+          this.matches = badmintonMatches;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 
-  changeStyle($event) {
+  /*changeStyle($event) {
     this.isActive = $event.type === 'mouseover' ? 'active' : 'none';
-  }
+  }*/
 
 }
