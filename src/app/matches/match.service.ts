@@ -11,12 +11,6 @@ import { Observable } from 'rxjs/Observable';
 export class MatchService {
     private matchUrl = 'http://localhost:8080/api/matches';
 
-    httpOptions = {
-        headers: new HttpHeaders({
-            'Content-Type': 'application/json'
-        })
-    };
-
     constructor(private _http: HttpClient) { }
 
     getMatches(): Observable<BadmintonMatch[]> {
@@ -26,7 +20,9 @@ export class MatchService {
     }
 
     createMatch(badmintonMatch: BadmintonMatch): Observable<BadmintonMatch> {
-        return this._http.post<BadmintonMatch>(this.matchUrl + '/create', badmintonMatch, this.httpOptions);
+        return this._http.post<BadmintonMatch>(this.matchUrl + '/create', badmintonMatch)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
     }
 
     private handleError(err: HttpErrorResponse) {
