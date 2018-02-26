@@ -10,6 +10,9 @@ import { TournamentModule } from './tournaments/tournament.module';
 import { CompetitionModule } from './competitions/competition.module';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AccountModule } from './account/account.module';
+import { AccountCreateComponent } from './account/account-create/account-create.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -25,7 +28,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     MatchModule,
     TournamentModule,
-    CompetitionModule
+    CompetitionModule,
+    AccountModule
   ],
   providers: [],
   bootstrap: [AppComponent]

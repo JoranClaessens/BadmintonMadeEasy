@@ -10,9 +10,13 @@ import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.co
 import { AppModule } from './app.module';
 import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 import { MatchCreateComponent } from './matches/match-create/match-create.component';
+import { AccountLoginComponent } from './account/account-login/account-login.component';
+import { AccountCreateComponent } from './account/account-create/account-create.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'account/login', component: AccountLoginComponent },
+  { path: 'account/create', component: AccountCreateComponent },
   { path: 'matches', component: MatchListComponent },
   { path: 'matches/create', component: MatchCreateComponent },
   { path: 'matches/:id', component: MatchDetailComponent },

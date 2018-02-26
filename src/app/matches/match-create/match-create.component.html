@@ -1,8 +1,21 @@
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage.message}}
+</div>
+<div *ngIf="matchCreated" class="alert alert-dismissible alert-success container">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Wedstrijd succesvol aangemaakt!
+  <a href="#" class="alert-link">Ga naar wedstrijd</a>
+</div>
 <div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>Wedstrijd aanmaken</h1>
   <hr class="my-3">
   <form>
     <fieldset>
+      <div class="form-group">
+        <label for="matchTitle">Titel</label>
+        <input type="text" class="form-control" name="matchTitle" placeholder="Wedstrijd titel" [(ngModel)]="matchTitle">
+      </div>
       <div class="form-group">
         <label for="matchType">Type match</label>
         <select class="form-control" id="matchType" [(ngModel)]="selectedMatchType" name="matchTypes">
@@ -19,14 +32,16 @@
         <div class="row">
           <div class="col-md-5">
             <input type="text" class="form-control" placeholder="Speler 1" name="speler1" [(ngModel)]="player1">
-            <input *ngIf="selectedMatchType === 'MEN_DOUBLE' || selectedMatchType === 'WOMEN_DOUBLE' || selectedMatchType === 'MIX'" type="text" class="form-control" placeholder="Speler 3" name="speler3" [(ngModel)]="player3">
+            <input *ngIf="selectedMatchType === 'MEN_DOUBLE' || selectedMatchType === 'WOMEN_DOUBLE' || selectedMatchType === 'MIX'"
+              type="text" class="form-control" placeholder="Speler 3" name="speler3" [(ngModel)]="player3">
           </div>
           <div class="col-md-2" style="display: flex; align-items: center; justify-content: center;">
             VS
           </div>
           <div class="col-md-5">
             <input type="text" class="form-control" placeholder="Speler 2" name="speler2" [(ngModel)]="player2">
-            <input *ngIf="selectedMatchType === 'MEN_DOUBLE' || selectedMatchType === 'WOMEN_DOUBLE' || selectedMatchType === 'MIX'" type="text" class="form-control" placeholder="Speler 4" name="speler4" [(ngModel)]="player4">
+            <input *ngIf="selectedMatchType === 'MEN_DOUBLE' || selectedMatchType === 'WOMEN_DOUBLE' || selectedMatchType === 'MIX'"
+              type="text" class="form-control" placeholder="Speler 4" name="speler4" [(ngModel)]="player4">
           </div>
         </div>
       </div>

@@ -1,0 +1,25 @@
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage.message}}
+</div>
+<div *ngIf="customErrorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearCustomErrorMessage()">&times;</button>
+  {{customErrorMessage}}
+</div>
+<div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
+  <h1>Account aanmaken</h1>
+  <hr class="my-3">
+  <form>
+    <fieldset>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="email">
+      </div>
+      <div class="form-group">
+        <label for="password">Wachtwoord</label>
+        <input type="password" class="form-control" name="password" placeholder="Wachtwoord" [(ngModel)]="password">
+      </div>
+      <button type="submit" class="btn btn-primary" (click)="createAccount()">Registreer</button>
+    </fieldset>
+  </form>
+</div>
