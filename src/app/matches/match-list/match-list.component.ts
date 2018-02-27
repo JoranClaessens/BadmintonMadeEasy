@@ -11,6 +11,7 @@ import { UserService } from '../../account/user.service';
 })
 export class MatchListComponent implements OnInit {
   // isActive = 'active';
+  loggedIn = false;
   selectedMatchTab: number;
   matches: BadmintonMatch[];
   errorMessage: HttpErrorResponse;
@@ -18,11 +19,13 @@ export class MatchListComponent implements OnInit {
   constructor(private _userService: UserService, private _matchService: MatchService) { }
 
   ngOnInit() {
+    if (this._userService.getUser()) {
+      this.loggedIn = true;
+    }
     this.loadAllMatches();
   }
 
   onMatchTabChanged() {
-    console.log('test');
     if (this.selectedMatchTab === 1) {
       this.loadAllMatches();
     } else {
@@ -43,14 +46,19 @@ export class MatchListComponent implements OnInit {
   }
 
   loadUserMatches() {
-    this._matchService.getMatchesByUser(this._userService.getUser().id)
-      .subscribe(
-        badmintonMatches => {
-          this.matches = badmintonMatches;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        });
+    if (this._userService.getUser()) {
+      this._matchService.getMatchesByUser(this._userService.getUser().id)
+        .subscribe(
+          badmintonMatches => {
+            this.matches = badmintonMatches;
+          },
+          error => {
+            this.errorMessage = <any>error;
+          });
+    } else {
+      this.matches = null;
+    }
+
   }
 
   /*changeStyle($event) {

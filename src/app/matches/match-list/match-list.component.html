@@ -9,6 +9,12 @@
     </label>
   </div>
   <hr class="my-3">
+  <div *ngIf="!loggedIn && selectedMatchTab === 2" class="alert alert-warning">
+    U moet eerst aangemeld zijn om jouw wedstrijden te kunnen zien!
+    <a [routerLink]="['/account/login']" class="alert-link">Aanmelden</a>
+    of
+    <a [routerLink]="['/account/create']" class="alert-link">Registreer nu</a>
+  </div>
   <div class="list-group">
     <a *ngFor="let match of matches" class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]="{'list-group-item-primary': match.type === 'MEN_SINGLE' || match.type === 'MEN_DOUBLE',
                   'list-group-item-info': match.type === 'WOMEN_SINGLE' || match.type === 'WOMEN_DOUBLE',
