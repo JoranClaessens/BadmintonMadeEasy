@@ -19,6 +19,12 @@ export class MatchService {
             .catch(this.handleError);
     }
 
+    getMatchesByUser(userId: number): Observable<BadmintonMatch[]> {
+        return this._http.get<BadmintonMatch[]>(this.matchUrl + '/user/' + userId)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     getMatchById(id: number): Observable<BadmintonMatch> {
         return this._http.get<BadmintonMatch>(this.matchUrl + '/' + id)
             .do(data => console.log('All: ' + JSON.stringify(data)))

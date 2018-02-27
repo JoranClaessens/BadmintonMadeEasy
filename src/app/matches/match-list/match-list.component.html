@@ -1,11 +1,11 @@
 <div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>Wedstrijden</h1>
-  <div class="btn-group btn-group-toggle" data-toggle="buttons">
-    <label class="btn btn-primary active">
-      <input type="radio" name="options" id="option1" autocomplete="off"> Alle wedstrijden
+  <div class="btn-group btn-group-toggle">
+    <label class="btn btn-primary" [ngClass]="{'active': selectedMatchTab === 1}">
+      <input type="radio" name="options" [value]="1" [(ngModel)]="selectedMatchTab" (change)="onMatchTabChanged()">Alle wedstrijden
     </label>
-    <label class="btn btn-primary">
-      <input type="radio" name="options" id="option2" autocomplete="off"> Jouw wedstrijden
+    <label class="btn btn-primary" [ngClass]="{'active': selectedMatchTab === 2}">
+      <input type="radio" name="options" [value]="2" [(ngModel)]="selectedMatchTab" (change)="onMatchTabChanged()">Jouw wedstrijden
     </label>
   </div>
   <hr class="my-3">
