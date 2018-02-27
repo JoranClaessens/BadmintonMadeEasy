@@ -1,3 +1,7 @@
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage.message}}
+</div>
 <div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>Wedstrijden</h1>
   <div class="btn-group btn-group-toggle">
@@ -6,6 +10,7 @@
     </label>
     <label class="btn btn-primary" [ngClass]="{'active': selectedMatchTab === 2}">
       <input type="radio" name="options" [value]="2" [(ngModel)]="selectedMatchTab" (change)="onMatchTabChanged()">Jouw wedstrijden
+      <span class="badge badge-danger badge-pill">{{userMatchesCount}}</span>
     </label>
   </div>
   <hr class="my-3">
@@ -14,6 +19,9 @@
     <a [routerLink]="['/account/login']" class="alert-link">Aanmelden</a>
     of
     <a [routerLink]="['/account/create']" class="alert-link">Registreer nu</a>
+  </div>
+  <div *ngIf="matches && matches.length < 1 && loggedIn" class="alert alert-warning">
+    Geen wedstrijden gevonden!
   </div>
   <div class="list-group">
     <a *ngFor="let match of matches" class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]="{'list-group-item-primary': match.type === 'MEN_SINGLE' || match.type === 'MEN_DOUBLE',

@@ -1,3 +1,57 @@
-<p>
-  match-simulate works!
-</p>
+<div *ngIf="match" class="container-fluid" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
+  <h1>{{match.title}}</h1>
+  <hr class="my-3">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card border-dark mb-3">
+        <div class="card-header">
+          <div *ngIf="match.type === 'MEN_SINGLE' || match.type === 'WOMEN_SINGLE'" class="row">
+            <div class="col-md-5" style="font-weight: bold; text-align: right; font-size: 30px;">
+              {{match.player1}}
+            </div>
+            <div class="col-md-2" style="font-weight: bold; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center;">
+              VS
+            </div>
+            <div class="col-md-5" style="font-weight: bold; text-align: left; font-size: 30px;">
+              {{match.player2}}
+            </div>
+          </div>
+          <div *ngIf="match.type !== 'MEN_SINGLE' && match.type !== 'WOMEN_SINGLE'" class="row">
+            <div class="col-md-5" style="font-weight: bold; text-align: right; font-size: 30px;">
+              {{match.player1}}
+              <br>{{match.player3}}
+            </div>
+            <div class="col-md-2" style="font-weight: bold; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center;">
+              VS
+            </div>
+            <div class="col-md-5" style="font-weight: bold; text-align: left; font-size: 30px;">
+              {{match.player2}}
+              <br>{{match.player4}}
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">
+            <div style="text-align: center; font-size: 50px">
+              {{currentGame.pointsTeam1}} - {{currentGame.pointsTeam2}}
+            </div>
+          </h4>
+          <div *ngFor="let game of match.games" style="text-align: center; font-size: 15px">
+            {{game.pointsTeam1}} - {{game.pointsTeam2}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <img [src]="courtImage" style="width: 100%;" />
+      <div class="bottom-left">
+        <button class="btn btn-sm btn-dark" style="font-size: 14px">{{match.player1}}</button>
+      </div>
+      <div class="top-right">
+        <button class="btn btn-sm btn-dark" style="font-size: 14px">{{match.player2}}</button>
+      </div>
+    </div>
+  </div>
+</div>

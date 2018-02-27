@@ -13,6 +13,7 @@ export class MatchListComponent implements OnInit {
   // isActive = 'active';
   loggedIn = false;
   selectedMatchTab: number;
+  userMatchesCount = 0;
   matches: BadmintonMatch[];
   errorMessage: HttpErrorResponse;
 
@@ -21,6 +22,7 @@ export class MatchListComponent implements OnInit {
   ngOnInit() {
     if (this._userService.getUser()) {
       this.loggedIn = true;
+      this.loadUserMatches();
     }
     this.loadAllMatches();
   }
@@ -51,6 +53,7 @@ export class MatchListComponent implements OnInit {
         .subscribe(
           badmintonMatches => {
             this.matches = badmintonMatches;
+            this.userMatchesCount = this.matches.length;
           },
           error => {
             this.errorMessage = <any>error;
@@ -58,7 +61,10 @@ export class MatchListComponent implements OnInit {
     } else {
       this.matches = null;
     }
+  }
 
+  clearErrorMessage() {
+    this.errorMessage = null;
   }
 
   /*changeStyle($event) {
