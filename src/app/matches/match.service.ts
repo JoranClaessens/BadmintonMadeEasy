@@ -19,8 +19,14 @@ export class MatchService {
             .catch(this.handleError);
     }
 
-    createMatch(badmintonMatch: BadmintonMatch): Observable<BadmintonMatch> {
-        return this._http.post<BadmintonMatch>(this.matchUrl + '/create', badmintonMatch)
+    getMatchById(id: number): Observable<BadmintonMatch> {
+        return this._http.get<BadmintonMatch>(this.matchUrl + '/' + id)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    createMatch(badmintonMatch: BadmintonMatch, userId: number): Observable<BadmintonMatch> {
+        return this._http.post<BadmintonMatch>(this.matchUrl + '/create/' + userId, badmintonMatch)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
