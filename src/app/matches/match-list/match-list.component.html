@@ -20,7 +20,7 @@
     of
     <a [routerLink]="['/account/create']" class="alert-link">Registreer nu</a>
   </div>
-  <div *ngIf="matches && matches.length < 1 && loggedIn" class="alert alert-warning">
+  <div *ngIf="matches && matches.length < 1" class="alert alert-warning">
     Geen wedstrijden gevonden!
   </div>
   <div class="list-group">

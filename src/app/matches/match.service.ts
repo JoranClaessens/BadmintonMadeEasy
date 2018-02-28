@@ -6,6 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { Game } from './game';
 
 @Injectable()
 export class MatchService {
@@ -15,6 +16,12 @@ export class MatchService {
 
     getMatches(): Observable<BadmintonMatch[]> {
         return this._http.get<BadmintonMatch[]>(this.matchUrl)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getGameByGamePK(matchId: number, gameId: number): Observable<Game> {
+        return this._http.get<Game>(this.matchUrl + '/game/' + matchId + '/' + gameId)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
@@ -33,6 +40,18 @@ export class MatchService {
 
     createMatch(badmintonMatch: BadmintonMatch, userId: number): Observable<BadmintonMatch> {
         return this._http.post<BadmintonMatch>(this.matchUrl + '/create/' + userId, badmintonMatch)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    updateMatch(badmintonMatch: BadmintonMatch) {
+        this._http.put<BadmintonMatch>(this.matchUrl, badmintonMatch)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    updateGame(game: Game): Observable<Game> {
+        return this._http.put<Game>(this.matchUrl + '/game', game)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }

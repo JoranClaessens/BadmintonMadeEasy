@@ -33,11 +33,16 @@
         <div class="card-body">
           <h4 class="card-title">
             <div style="text-align: center; font-size: 50px">
-              {{currentGame.pointsTeam1}} - {{currentGame.pointsTeam2}}
+              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam1 === 0" (click)="pointsTeam1Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam1}}<button class="btn btn-sm" style="margin-left: 5px;" (click)="pointsTeam1More()"><i class="fas fa-caret-up"></i></button> 
+              - 
+              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam2 === 0" (click)="pointsTeam2Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam2}}<button class="btn btn-sm" style="margin-left: 5px;" (click)="pointsTeam2More()"><i class="fas fa-caret-up"></i></button>
             </div>
           </h4>
           <div *ngFor="let game of match.games" style="text-align: center; font-size: 15px">
             {{game.pointsTeam1}} - {{game.pointsTeam2}}
+          </div>
+          <div *ngIf="gameFinished" style="text-align: center; font-size: 15px">
+            <button class="btn btn-sm btn-warning"><i class="fas fa-plus"></i>  Nieuw set</button>
           </div>
         </div>
       </div>
@@ -46,11 +51,17 @@
   <div class="row justify-content-center">
     <div class="col-md-6">
       <img [src]="courtImage" style="width: 100%;" />
-      <div class="bottom-left">
-        <button class="btn btn-sm btn-dark" style="font-size: 14px">{{match.player1}}</button>
+      <div class="bottom-left" [ngClass]="{'bottom-left': (match.serviceTeam1 === true && currentGame.pointsTeam1 % 2 === 0) 
+                                                      || (match.serviceTeam1 === false && currentGame.pointsTeam2 % 2 === 0), 
+                                            'top-left': (match.serviceTeam1 === true && currentGame.pointsTeam1 % 2 > 0) 
+                                                      || (match.serviceTeam1 === false && currentGame.pointsTeam2 % 2 > 0)}">
+        <button class="btn btn-sm" [ngClass]="{'btn-success': match.serviceTeam1 === true, 'btn-dark': match.serviceTeam1 === false}" style="font-size: 14px">{{match.player1}}</button>
       </div>
-      <div class="top-right">
-        <button class="btn btn-sm btn-dark" style="font-size: 14px">{{match.player2}}</button>
+      <div class="top-right" [ngClass]="{'top-right': (match.serviceTeam2 === true && currentGame.pointsTeam2 % 2 === 0) 
+                                                      || (match.serviceTeam2 === false && currentGame.pointsTeam1 % 2 === 0), 
+                                            'bottom-right': (match.serviceTeam2 === true && currentGame.pointsTeam2 % 2 > 0) 
+                                                      || (match.serviceTeam2 === false && currentGame.pointsTeam1 % 2 > 0)}">
+        <button class="btn btn-sm btn-dark" [ngClass]="{'btn-success': match.serviceTeam2 === true, 'btn-dark': match.serviceTeam2 === false}" style="font-size: 14px">{{match.player2}}</button>
       </div>
     </div>
   </div>

@@ -28,7 +28,7 @@ export class MatchCreateComponent implements OnInit {
 
   createMatch() {
     this._matchService.createMatch(new BadmintonMatch(this.matchTitle, this.selectedMatchType,
-      this.player1, this.player2, this.player3, this.player4), this._userService.getUser().id)
+      this.player1, this.player2, this.player3, this.player4, true, false), this._userService.getUser().id)
       .subscribe(
         badmintonMatch => {
           if (badmintonMatch) {
