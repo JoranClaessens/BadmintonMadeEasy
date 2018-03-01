@@ -57,7 +57,6 @@ export class MatchDetailComponent implements OnInit, OnDestroy {
       .subscribe(
         badmintonMatch => {
           this.match = badmintonMatch;
-          this.currentGame = badmintonMatch.games[badmintonMatch.games.length - 1];
           if (this.userMatches) {
             for (let i = 0; i < this.userMatches.length; i++) {
               if (this.userMatches[i].id === badmintonMatch.id) {
@@ -86,11 +85,10 @@ export class MatchDetailComponent implements OnInit, OnDestroy {
   checkGame() {
     if (!this.stopPolling) {
       setTimeout(() => {
-        this._matchService.getGameByGamePK(this.match.id, this.currentGame.gamePk.gameId)
+        this._matchService.getMatchById(this.match.id)
           .subscribe(
-            game => {
-              this.currentGame = game;
-              this.match.games[this.match.games.length - 1] = this.currentGame;
+            badmintonmatch => {
+              this.match = badmintonmatch;
               this.checkGame();
             },
             error => {

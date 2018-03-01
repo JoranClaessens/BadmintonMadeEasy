@@ -44,8 +44,8 @@ export class MatchService {
             .catch(this.handleError);
     }
 
-    updateMatch(badmintonMatch: BadmintonMatch) {
-        this._http.put<BadmintonMatch>(this.matchUrl, badmintonMatch)
+    updateMatch(badmintonMatch: BadmintonMatch): Observable<BadmintonMatch> {
+        return this._http.put<BadmintonMatch>(this.matchUrl, badmintonMatch)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }

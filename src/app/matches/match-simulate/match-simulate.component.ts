@@ -36,29 +36,31 @@ export class MatchSimulateComponent implements OnInit {
   }
 
   pointsTeam1More() {
+    this.match.serviceTeam1 = true;
+    this.checkPlayerLocations();
     if (this.currentGame.pointsTeam1 - this.currentGame.pointsTeam2 < 2 || this.currentGame.pointsTeam1 < 21) {
       this.currentGame.pointsTeam1++;
       this.updateGame();
     }
-    this.match.serviceTeam1 = true;
-    this.match.serviceTeam2 = false;
   }
 
   pointsTeam2More() {
+    this.match.serviceTeam1 = false;
+    this.checkPlayerLocations();
     if (this.currentGame.pointsTeam2 - this.currentGame.pointsTeam1 < 2 || this.currentGame.pointsTeam2 < 21) {
       this.currentGame.pointsTeam2++;
       this.updateGame();
     }
-    this.match.serviceTeam1 = false;
-    this.match.serviceTeam2 = true;
   }
 
   pointsTeam1Less() {
+    this.checkPlayerLocations();
     this.currentGame.pointsTeam1--;
     this.updateGame();
   }
 
   pointsTeam2Less() {
+    this.checkPlayerLocations();
     this.currentGame.pointsTeam2--;
     this.updateGame();
   }
@@ -72,7 +74,14 @@ export class MatchSimulateComponent implements OnInit {
         error => {
           this.errorMessage = <any>error;
         });
-    this._matchService.updateMatch(this.match);
+    this._matchService.updateMatch(this.match)
+      .subscribe(
+        badmintonMatch => {
+          console.log('test');
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 
   checkGame() {
@@ -81,6 +90,17 @@ export class MatchSimulateComponent implements OnInit {
       this.gameFinished = true;
     } else {
       this.gameFinished = false;
+    }
+  }
+
+  checkPlayerLocations() {
+    if ((this.match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0)
+      || (!this.match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0)) {
+      this.match.player1Left = true;
+      this.match.player2Left = true;
+    } else {
+      this.match.player1Left = false;
+      this.match.player2Left = false;
     }
   }
 }

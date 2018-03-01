@@ -51,17 +51,13 @@
   <div class="row justify-content-center">
     <div class="col-md-6">
       <img [src]="courtImage" style="width: 100%;" />
-      <div class="bottom-left" [ngClass]="{'bottom-left': (match.serviceTeam1 === true && currentGame.pointsTeam1 % 2 === 0) 
-                                                      || (match.serviceTeam1 === false && currentGame.pointsTeam2 % 2 === 0), 
-                                            'top-left': (match.serviceTeam1 === true && currentGame.pointsTeam1 % 2 > 0) 
-                                                      || (match.serviceTeam1 === false && currentGame.pointsTeam2 % 2 > 0)}">
-        <button class="btn btn-sm" [ngClass]="{'btn-success': match.serviceTeam1 === true, 'btn-dark': match.serviceTeam1 === false}" style="font-size: 14px">{{match.player1}}</button>
+      <div  [ngClass]="{'bottom-left': !match.player1Left, 
+                          'top-left': match.player1Left}">
+        <button class="btn btn-sm" [ngClass]="{'btn-success': match.serviceTeam1, 'btn-dark': !match.serviceTeam1}" style="font-size: 14px">{{match.player1}}</button>
       </div>
-      <div class="top-right" [ngClass]="{'top-right': (match.serviceTeam2 === true && currentGame.pointsTeam2 % 2 === 0) 
-                                                      || (match.serviceTeam2 === false && currentGame.pointsTeam1 % 2 === 0), 
-                                            'bottom-right': (match.serviceTeam2 === true && currentGame.pointsTeam2 % 2 > 0) 
-                                                      || (match.serviceTeam2 === false && currentGame.pointsTeam1 % 2 > 0)}">
-        <button class="btn btn-sm btn-dark" [ngClass]="{'btn-success': match.serviceTeam2 === true, 'btn-dark': match.serviceTeam2 === false}" style="font-size: 14px">{{match.player2}}</button>
+      <div [ngClass]="{'top-right': !match.player2Left, 
+                          'bottom-right': match.player2Left}">
+        <button class="btn btn-sm" [ngClass]="{'btn-success': !match.serviceTeam1, 'btn-dark': match.serviceTeam1}" style="font-size: 14px">{{match.player2}}</button>
       </div>
     </div>
   </div>

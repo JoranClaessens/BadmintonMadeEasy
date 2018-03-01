@@ -43,7 +43,7 @@
         <div class="card-body">
           <h4 class="card-title">
             <div style="text-align: center; font-size: 50px">
-              {{currentGame.pointsTeam1}} - {{currentGame.pointsTeam2}}
+              {{match.games[match.games.length - 1].pointsTeam1}} - {{match.games[match.games.length - 1].pointsTeam2}}
             </div>
           </h4>
           <div *ngFor="let game of match.games" style="text-align: center; font-size: 15px">
@@ -66,11 +66,13 @@
   <div class="row justify-content-center">
     <div class="col-md-6">
       <img [src]="courtImage" style="width: 100%;" />
-      <div class="bottom-left">
-        <button class="btn btn-sm btn-dark" style="font-size: 14px">{{match.player1}}</button>
+      <div [ngClass]="{'bottom-left': !match.player1Left, 
+                          'top-left': match.player1Left}">
+        <button class="btn btn-sm" [ngClass]="{'btn-success': match.serviceTeam1, 'btn-dark': !match.serviceTeam1}" style="font-size: 14px">{{match.player1}}</button>
       </div>
-      <div class="top-right">
-        <button class="btn btn-sm btn-dark" style="font-size: 14px">{{match.player2}}</button>
+      <div [ngClass]="{'top-right': !match.player2Left, 
+                          'bottom-right': match.player2Left}">
+        <button class="btn btn-sm" [ngClass]="{'btn-success': !match.serviceTeam1, 'btn-dark': match.serviceTeam1}" style="font-size: 14px">{{match.player2}}</button>
       </div>
     </div>
   </div>
