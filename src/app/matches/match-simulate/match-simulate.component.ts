@@ -36,8 +36,14 @@ export class MatchSimulateComponent implements OnInit {
   }
 
   pointsTeam1More() {
+    if (this.match.type !== 'MEN_SINGLE' && this.match.type !== 'WOMEN_SINGLE') {
+      this.checkDoublePlayerLocations(1);
+    }
     this.match.serviceTeam1 = true;
-    this.checkPlayerLocations();
+    if (this.match.type === 'MEN_SINGLE' || this.match.type === 'WOMEN_SINGLE') {
+      this.checkSinglePlayerLocations();
+    }
+
     if (this.currentGame.pointsTeam1 - this.currentGame.pointsTeam2 < 2 || this.currentGame.pointsTeam1 < 21) {
       this.currentGame.pointsTeam1++;
       this.updateGame();
@@ -45,8 +51,14 @@ export class MatchSimulateComponent implements OnInit {
   }
 
   pointsTeam2More() {
+    if (this.match.type !== 'MEN_SINGLE' && this.match.type !== 'WOMEN_SINGLE') {
+      this.checkDoublePlayerLocations(2);
+    }
     this.match.serviceTeam1 = false;
-    this.checkPlayerLocations();
+    if (this.match.type === 'MEN_SINGLE' || this.match.type === 'WOMEN_SINGLE') {
+      this.checkSinglePlayerLocations();
+    }
+
     if (this.currentGame.pointsTeam2 - this.currentGame.pointsTeam1 < 2 || this.currentGame.pointsTeam2 < 21) {
       this.currentGame.pointsTeam2++;
       this.updateGame();
@@ -54,13 +66,13 @@ export class MatchSimulateComponent implements OnInit {
   }
 
   pointsTeam1Less() {
-    this.checkPlayerLocations();
+    this.checkSinglePlayerLocations();
     this.currentGame.pointsTeam1--;
     this.updateGame();
   }
 
   pointsTeam2Less() {
-    this.checkPlayerLocations();
+    this.checkSinglePlayerLocations();
     this.currentGame.pointsTeam2--;
     this.updateGame();
   }
@@ -93,7 +105,7 @@ export class MatchSimulateComponent implements OnInit {
     }
   }
 
-  checkPlayerLocations() {
+  checkSinglePlayerLocations() {
     if ((this.match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0)
       || (!this.match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0)) {
       this.match.player1Left = true;
@@ -101,6 +113,18 @@ export class MatchSimulateComponent implements OnInit {
     } else {
       this.match.player1Left = false;
       this.match.player2Left = false;
+    }
+  }
+
+  checkDoublePlayerLocations(id: number) {
+    if (id === 1) {
+      if (this.match.serviceTeam1) {
+        this.match.player1Left = !this.match.player1Left;
+      }
+    } else {
+      if (!this.match.serviceTeam1) {
+        this.match.player2Left = !this.match.player2Left;
+      }
     }
   }
 }
