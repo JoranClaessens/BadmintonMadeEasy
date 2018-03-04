@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { MatchCreateComponent } from './match-create/match-create.component';
 import { MatchService } from './match.service';
 import { MatchSimulateComponent } from './match-simulate/match-simulate.component';
+import { MatchEditComponent } from './match-edit/match-edit.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { MatchSimulateComponent } from './match-simulate/match-simulate.componen
     MatchListComponent,
     MatchDetailComponent,
     MatchCreateComponent,
-    MatchSimulateComponent
+    MatchSimulateComponent,
+    MatchEditComponent
 ],
   providers: [
     MatchService

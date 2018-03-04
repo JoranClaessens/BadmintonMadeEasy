@@ -2,6 +2,10 @@
   <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
   {{errorMessage.message}}
 </div>
+<div *ngIf="customWarningMessage" class="alert alert-dismissible alert-warning container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearcustomWarningMessage()">&times;</button>
+  {{customWarningMessage}}
+</div>
 <div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>Wedstrijden</h1>
   <div class="btn-group btn-group-toggle">
@@ -12,6 +16,7 @@
       <input type="radio" name="options" [value]="2" [(ngModel)]="selectedMatchTab" (change)="onMatchTabChanged()">Jouw wedstrijden
       <span class="badge badge-danger badge-pill">{{userMatchesCount}}</span>
     </label>
+    <button class="btn btn-warning" (click)="createMatch()"><i class="fas fa-plus"></i>  Wedstrijd aanmaken</button>
   </div>
   <hr class="my-3">
   <div *ngIf="!loggedIn && selectedMatchTab === 2" class="alert alert-warning">

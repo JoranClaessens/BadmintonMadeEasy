@@ -115,7 +115,7 @@ export class MatchSimulateComponent implements OnInit {
                   .subscribe(
                     badmintonMatch2 => {
                       this.match = badmintonMatch2;
-                      this.currentGame = badmintonMatch.games[badmintonMatch2.games.length - 1];
+                      this.currentGame = badmintonMatch2.games[badmintonMatch2.games.length - 1];
                     },
                     error => {
                       this.errorMessage = <any>error;

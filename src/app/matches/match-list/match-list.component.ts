@@ -3,6 +3,7 @@ import { MatchService } from '../match.service';
 import { BadmintonMatch } from '../badminton-match';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../account/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'bme-match-list',
@@ -10,14 +11,14 @@ import { UserService } from '../../account/user.service';
   styleUrls: ['./match-list.component.css']
 })
 export class MatchListComponent implements OnInit {
-  // isActive = 'active';
   loggedIn = false;
   selectedMatchTab: number;
   userMatchesCount = 0;
   matches: BadmintonMatch[];
   errorMessage: HttpErrorResponse;
+  customWarningMessage: string;
 
-  constructor(private _userService: UserService, private _matchService: MatchService) { }
+  constructor(private _userService: UserService, private _matchService: MatchService, private _router: Router) { }
 
   ngOnInit() {
     if (this._userService.getUser()) {
@@ -63,12 +64,19 @@ export class MatchListComponent implements OnInit {
     }
   }
 
+  createMatch() {
+    if (this._userService.getUser()) {
+      this._router.navigate(['/matches/create']);
+    } else {
+      this.customWarningMessage = 'U moet zich eerst aanmelden of registreren voordat u een wedstrijd kan aanmaken!';
+    }
+  }
+
   clearErrorMessage() {
     this.errorMessage = null;
   }
 
-  /*changeStyle($event) {
-    this.isActive = $event.type === 'mouseover' ? 'active' : 'none';
-  }*/
-
+  clearcustomWarningMessage() {
+    this.customWarningMessage = null;
+  }
 }
