@@ -98,7 +98,8 @@ export class MatchSimulateComponent implements OnInit {
 
   checkGame() {
     if ((this.currentGame.pointsTeam1 > 20 && this.currentGame.pointsTeam1 - this.currentGame.pointsTeam2 >= 2)
-      || (this.currentGame.pointsTeam2 > 20 && this.currentGame.pointsTeam2 - this.currentGame.pointsTeam1 >= 2)) {
+      || (this.currentGame.pointsTeam2 > 20 && this.currentGame.pointsTeam2 - this.currentGame.pointsTeam1 >= 2)
+      || this.currentGame.pointsTeam1 === 30 || this.currentGame.pointsTeam2 === 30) {
       this.gameFinished = true;
     } else {
       this.gameFinished = false;

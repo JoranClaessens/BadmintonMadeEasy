@@ -1,4 +1,5 @@
 import { Game } from './game';
+import { User } from '../account/user';
 
 export class BadmintonMatch {
     id: number;
@@ -12,6 +13,7 @@ export class BadmintonMatch {
     player2Left: boolean;
     serviceTeam1: boolean;
     games: Game[];
+    user: User;
 
     constructor(title: string, type: string, player1: string, player2: string, player3: string, player4: string) {
         this.title = title;

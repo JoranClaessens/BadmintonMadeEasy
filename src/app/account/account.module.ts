@@ -4,6 +4,7 @@ import { AccountCreateComponent } from './account-create/account-create.componen
 import { AccountLoginComponent } from './account-login/account-login.component';
 import { FormsModule } from '@angular/forms';
 import { UserService } from './user.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { UserService } from './user.service';
     AccountCreateComponent
   ],
   providers: [
-    UserService
+    UserService,
+    CookieService
   ]
 })
 export class AccountModule { }

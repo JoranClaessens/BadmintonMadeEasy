@@ -1,6 +1,6 @@
 <div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
   <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
-  {{errorMessage.message}}
+  {{errorMessage}}
 </div>
 <div *ngIf="customErrorMessage" class="alert alert-dismissible alert-danger container">
   <button type="button" class="close" data-dismiss="alert" (click)="clearCustomErrorMessage()">&times;</button>
