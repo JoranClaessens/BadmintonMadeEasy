@@ -27,7 +27,16 @@ export class MatchSimulateComponent implements OnInit {
   ngOnInit() {
     this.serviceTeam1 = true;
     const id = +this._route.snapshot.paramMap.get('id');
-    this.loadMatch(id);
+    this._matchService.getMatchById(id)
+      .subscribe(
+        badmintonMatch => {
+          this.match = badmintonMatch;
+          this.currentGame = badmintonMatch.games[badmintonMatch.games.length - 1];
+          this.checkGame();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 
   pointsTeam1More() {
@@ -102,7 +111,15 @@ export class MatchSimulateComponent implements OnInit {
           this._matchService.createGame(new Game(this.newGamePk, 0, 0))
             .subscribe(
               game => {
-                this.loadMatch(this.match.id);
+                this._matchService.getMatchById(this.match.id)
+                  .subscribe(
+                    badmintonMatch2 => {
+                      this.match = badmintonMatch2;
+                      this.currentGame = badmintonMatch.games[badmintonMatch2.games.length - 1];
+                    },
+                    error => {
+                      this.errorMessage = <any>error;
+                    });
                 this.gameFinished = false;
               },
               error => {
@@ -168,17 +185,5 @@ export class MatchSimulateComponent implements OnInit {
         this.match.player2Left = !this.match.player2Left;
       }
     }
-  }
-
-  loadMatch(id: number) {
-    this._matchService.getMatchById(id)
-      .subscribe(
-        badmintonMatch => {
-          this.match = badmintonMatch;
-          this.currentGame = badmintonMatch.games[badmintonMatch.games.length - 1];
-        },
-        error => {
-          this.errorMessage = <any>error;
-        });
   }
 }
