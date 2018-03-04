@@ -1,3 +1,49 @@
-<p>
-  match-edit works!
-</p>
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage}}
+</div>
+<div *ngIf="matchUpdated" class="alert alert-dismissible alert-success container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearUpdateMessage()">&times;</button>
+  Wedstrijd succesvol opgeslagen!
+</div>
+<div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
+  <h1>Wedstrijd aanpassen</h1>
+  <hr class="my-3">
+  <form>
+    <fieldset>
+      <div class="form-group">
+        <label for="matchTitle">Titel</label>
+        <input type="text" class="form-control" name="matchTitle" placeholder="Wedstrijd titel" [(ngModel)]="match.title">
+      </div>
+      <div class="form-group">
+        <label for="matchType">Type match</label>
+        <select class="form-control" id="matchType" [(ngModel)]="match.type" name="matchTypes" disabled>
+          <option value="MEN_SINGLE">Heren enkel</option>
+          <option value="WOMEN_SINGLE">Vrouwen enkel</option>
+          <option value="MEN_DOUBLE">Heren dubbel</option>
+          <option value="WOMEN_DOUBLE">Vrouwen dubbel</option>
+          <option value="MIX">Mix</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Spelers</label>
+        <div class="row">
+          <div class="col-md-5">
+            <input (change)="checkForChanges()" type="text" class="form-control" placeholder="Speler 1" name="speler1" [(ngModel)]="match.player1">
+            <input (change)="checkForChanges()" *ngIf="match.type === 'MEN_DOUBLE' || match.type === 'WOMEN_DOUBLE' || match.type === 'MIX'"
+              type="text" class="form-control" placeholder="Speler 3" name="speler3" [(ngModel)]="match.player3">
+          </div>
+          <div class="col-md-2" style="display: flex; align-items: center; justify-content: center;">
+            VS
+          </div>
+          <div class="col-md-5">
+            <input (change)="checkForChanges()" type="text" class="form-control" placeholder="Speler 2" name="speler2" [(ngModel)]="match.player2">
+            <input (change)="checkForChanges()" *ngIf="match.type === 'MEN_DOUBLE' || match.type === 'WOMEN_DOUBLE' || match.type === 'MIX'"
+              type="text" class="form-control" placeholder="Speler 4" name="speler4" [(ngModel)]="match.player4">
+          </div>
+        </div>
+      </div>
+      <button *ngIf="anyChanges" type="submit" class="btn btn-primary" (click)="updateMatch()">Opslaan</button>
+    </fieldset>
+  </form>
+</div>

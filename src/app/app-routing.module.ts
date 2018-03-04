@@ -13,6 +13,7 @@ import { MatchCreateComponent } from './matches/match-create/match-create.compon
 import { AccountLoginComponent } from './account/account-login/account-login.component';
 import { AccountCreateComponent } from './account/account-create/account-create.component';
 import { MatchSimulateComponent } from './matches/match-simulate/match-simulate.component';
+import { MatchEditComponent } from './matches/match-edit/match-edit.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
   { path: 'matches', component: MatchListComponent },
   { path: 'matches/create', component: MatchCreateComponent },
   { path: 'matches/simulate/:id', component: MatchSimulateComponent },
+  { path: 'matches/edit/:id', component: MatchEditComponent },
   { path: 'matches/:id', component: MatchDetailComponent },
   { path: 'tournaments', component: TournamentListComponent },
   { path: 'competitions', component: CompetitionListComponent },
