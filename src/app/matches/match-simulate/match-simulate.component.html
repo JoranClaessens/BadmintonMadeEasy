@@ -33,16 +33,16 @@
         <div class="card-body">
           <h4 class="card-title">
             <div style="text-align: center; font-size: 50px">
-              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam1 === 0" (click)="pointsTeam1Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam1}}<button class="btn btn-sm" style="margin-left: 5px;" (click)="pointsTeam1More()"><i class="fas fa-caret-up"></i></button> 
+              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam1 === 0" (click)="pointsTeam1Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam1}}<button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam1More()"><i class="fas fa-caret-up"></i></button> 
               - 
-              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam2 === 0" (click)="pointsTeam2Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam2}}<button class="btn btn-sm" style="margin-left: 5px;" (click)="pointsTeam2More()"><i class="fas fa-caret-up"></i></button>
+              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam2 === 0" (click)="pointsTeam2Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam2}}<button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam2More()"><i class="fas fa-caret-up"></i></button>
             </div>
           </h4>
           <div *ngFor="let game of match.games" style="text-align: center; font-size: 15px">
             {{game.pointsTeam1}} - {{game.pointsTeam2}}
           </div>
-          <div *ngIf="gameFinished" style="text-align: center; font-size: 15px">
-            <button class="btn btn-sm btn-warning"><i class="fas fa-plus"></i>  Nieuw set</button>
+          <div *ngIf="gameFinished && !matchFinished" style="text-align: center; font-size: 15px">
+            <button class="btn btn-sm btn-warning" (click)="newGame()"><i class="fas fa-plus"></i>  Nieuw set</button>
           </div>
         </div>
       </div>

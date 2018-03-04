@@ -44,6 +44,12 @@ export class MatchService {
             .catch(this.handleError);
     }
 
+    createGame(game: Game): Observable<Game> {
+        return this._http.post<Game>(this.matchUrl + '/games/create', game)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     updateMatch(badmintonMatch: BadmintonMatch): Observable<BadmintonMatch> {
         return this._http.put<BadmintonMatch>(this.matchUrl, badmintonMatch)
             .do(data => console.log('All: ' + JSON.stringify(data)))

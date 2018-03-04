@@ -4,6 +4,7 @@ import { Game } from '../game';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatchService } from '../match.service';
 import { ActivatedRoute } from '@angular/router';
+import { GamePK } from '../gamePk';
 
 @Component({
   selector: 'bme-match-simulate',
@@ -14,7 +15,9 @@ export class MatchSimulateComponent implements OnInit {
   courtImage = 'assets/img/badminton-court.jpg';
   match: BadmintonMatch;
   gameFinished = false;
+  matchFinished = false;
   currentGame: Game;
+  newGamePk: GamePK;
   errorMessage: HttpErrorResponse;
   serviceTeam1 = false;
   serviceTeam2 = false;
@@ -24,15 +27,7 @@ export class MatchSimulateComponent implements OnInit {
   ngOnInit() {
     this.serviceTeam1 = true;
     const id = +this._route.snapshot.paramMap.get('id');
-    this._matchService.getMatchById(id)
-      .subscribe(
-        badmintonMatch => {
-          this.match = badmintonMatch;
-          this.currentGame = badmintonMatch.games[badmintonMatch.games.length - 1];
-        },
-        error => {
-          this.errorMessage = <any>error;
-        });
+    this.loadMatch(id);
   }
 
   pointsTeam1More() {
@@ -96,11 +91,57 @@ export class MatchSimulateComponent implements OnInit {
         });
   }
 
+  newGame() {
+    this.match.player1Left = false;
+    this.match.player2Left = false;
+    this._matchService.updateMatch(this.match)
+      .subscribe(
+        badmintonMatch => {
+          this.newGamePk = this.currentGame.gamePk;
+          this.newGamePk.gameId = this.newGamePk.gameId + 1;
+          this._matchService.createGame(new Game(this.newGamePk, 0, 0))
+            .subscribe(
+              game => {
+                this.loadMatch(this.match.id);
+                this.gameFinished = false;
+              },
+              error => {
+                this.errorMessage = <any>error;
+              });
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
+  }
+
   checkGame() {
     if ((this.currentGame.pointsTeam1 > 20 && this.currentGame.pointsTeam1 - this.currentGame.pointsTeam2 >= 2)
       || (this.currentGame.pointsTeam2 > 20 && this.currentGame.pointsTeam2 - this.currentGame.pointsTeam1 >= 2)
       || this.currentGame.pointsTeam1 === 30 || this.currentGame.pointsTeam2 === 30) {
       this.gameFinished = true;
+      this._matchService.getMatchById(this.match.id)
+        .subscribe(
+          badmintonMatch => {
+            this.match = badmintonMatch;
+            let gamesWonTeam1 = 0;
+            let gamesWonTeam2 = 0;
+            for (let i = 0; i < this.match.games.length; i++) {
+              if (this.match.games[i].pointsTeam1 > this.match.games[i].pointsTeam2) {
+                gamesWonTeam1++;
+              }
+
+              if (this.match.games[i].pointsTeam1 < this.match.games[i].pointsTeam2) {
+                gamesWonTeam2++;
+              }
+            }
+
+            if (gamesWonTeam1 === 2 || gamesWonTeam2 === 2) {
+              this.matchFinished = true;
+            }
+          },
+          error => {
+            this.errorMessage = <any>error;
+          });
     } else {
       this.gameFinished = false;
     }
@@ -127,5 +168,17 @@ export class MatchSimulateComponent implements OnInit {
         this.match.player2Left = !this.match.player2Left;
       }
     }
+  }
+
+  loadMatch(id: number) {
+    this._matchService.getMatchById(id)
+      .subscribe(
+        badmintonMatch => {
+          this.match = badmintonMatch;
+          this.currentGame = badmintonMatch.games[badmintonMatch.games.length - 1];
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 }
