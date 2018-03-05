@@ -50,7 +50,6 @@
             <input (keyup)="checkForChanges()" (change)="checkForChanges()" type="number" style="width: 70px; text-align: center" name="{{'pointsTeam1Set' + game.gamePk.gameId}}" [(ngModel)]="game.pointsTeam1"> -
             <input (keyup)="checkForChanges()" (change)="checkForChanges()" type="number" style="width: 70px; text-align: center" name="{{'pointsTeam2Set' + game.gamePk.gameId}}" [(ngModel)]="game.pointsTeam2">
           </div>
-
         </div>
       </div>
       <button *ngIf="anyChanges" type="submit" class="btn btn-primary" (click)="updateMatch()">Opslaan</button>

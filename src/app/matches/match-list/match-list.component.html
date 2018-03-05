@@ -34,7 +34,11 @@
                   'list-group-item-dark': match.type === 'MIX'}" [routerLink]="['/matches/' + match.id]">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{match.title}}</h5>
-        <small>10 minuten bezig...</small>
+        <small *ngIf="match.matchCreated && !match.matchFinished && match.duration > 1">{{match.duration}} minuten bezig...</small>
+        <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === 0">&lt; 1 minuut bezig...</small>
+        <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === 1">1 minuut bezig...</small>
+        <small *ngIf="!match.matchCreated">Moet nog starten...</small>
+        <small *ngIf="match.matchFinished">Wedstrijd afgelopen op {{match.matchFinished | date:'dd/MM/yyyy HH:mm:ss'}}</small>
       </div>
       <div *ngIf="match.type === 'MEN_SINGLE' || match.type === 'WOMEN_SINGLE'" class="row">
         <div class="col-md-5" style="font-weight: bold; text-align: right; font-size: 30px;">

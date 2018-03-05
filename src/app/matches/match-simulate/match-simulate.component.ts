@@ -39,6 +39,30 @@ export class MatchSimulateComponent implements OnInit {
         });
   }
 
+  startMatch() {
+    this.match.matchCreated = new Date();
+    this._matchService.updateMatch(this.match)
+      .subscribe(
+        badmintonMatch => {
+          console.log('test');
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
+  }
+
+  endMatch() {
+    this.match.matchFinished = new Date();
+    this._matchService.updateMatch(this.match)
+      .subscribe(
+        badmintonMatch => {
+          console.log('test');
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
+  }
+
   pointsTeam1More() {
     if (this.match.type !== 'MEN_SINGLE' && this.match.type !== 'WOMEN_SINGLE') {
       this.checkDoublePlayerLocations(1);

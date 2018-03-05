@@ -12,6 +12,8 @@ export class BadmintonMatch {
     player1Left: boolean;
     player2Left: boolean;
     serviceTeam1: boolean;
+    matchCreated: Date;
+    matchFinished: Date;
     games: Game[];
     user: User;
 

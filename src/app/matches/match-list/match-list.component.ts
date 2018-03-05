@@ -17,6 +17,7 @@ export class MatchListComponent implements OnInit {
   matches: BadmintonMatch[];
   errorMessage: HttpErrorResponse;
   customWarningMessage: string;
+  currentDate: Date = new Date();
 
   constructor(private _userService: UserService, private _matchService: MatchService, private _router: Router) { }
 
@@ -26,6 +27,7 @@ export class MatchListComponent implements OnInit {
       this.loadUserMatches();
     }
     this.loadAllMatches();
+    console.log(this.currentDate.getTime());
   }
 
   onMatchTabChanged() {
@@ -42,6 +44,7 @@ export class MatchListComponent implements OnInit {
       .subscribe(
         badmintonMatches => {
           this.matches = badmintonMatches;
+          this.convertToMinutes();
         },
         error => {
           this.errorMessage = <any>error;
@@ -55,6 +58,7 @@ export class MatchListComponent implements OnInit {
           badmintonMatches => {
             this.matches = badmintonMatches;
             this.userMatchesCount = this.matches.length;
+            this.convertToMinutes();
           },
           error => {
             this.errorMessage = <any>error;
@@ -69,6 +73,22 @@ export class MatchListComponent implements OnInit {
       this._router.navigate(['/matches/create']);
     } else {
       this.customWarningMessage = 'U moet zich eerst aanmelden of registreren voordat u een wedstrijd kan aanmaken!';
+    }
+  }
+
+  convertToMinutes() {
+    for (const match of this.matches) {
+      if (match.matchCreated) {
+        const eventStartTime = new Date(match.matchCreated);
+        const dateNow = new Date();
+        let duration = dateNow.valueOf() - eventStartTime.valueOf();
+        duration = Math.floor(duration / (1000 * 60) % 60);
+        if (duration !== 0) {
+          (<any>match).duration = duration;
+        } else {
+          (<any>match).duration = '0';
+        }
+      }
     }
   }
 

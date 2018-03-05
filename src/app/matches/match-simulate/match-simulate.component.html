@@ -1,7 +1,17 @@
 <div *ngIf="match" class="container-fluid" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>{{match.title}}</h1>
   <hr class="my-3">
-  <div class="row justify-content-center">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card border-dark mb-3" style="width: 100%; height: 100%;">
+        <div class="card-header text-center" style="font-size: 15px; font-weight: bold;">Locatie</div>
+        <div class="text-center text-info" style="font-size: 18px; margin-top: 25px;">
+          <p>3840 Borgloon</p>
+          <p>Oorsprongstraat 4</p>
+          <p>Baan 1</p>
+        </div>
+      </div>
+    </div>
     <div class="col-md-6">
       <div class="card border-dark mb-3">
         <div class="card-header">
@@ -33,17 +43,37 @@
         <div class="card-body">
           <h4 class="card-title">
             <div style="text-align: center; font-size: 50px">
-              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam1 === 0" (click)="pointsTeam1Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam1}}<button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam1More()"><i class="fas fa-caret-up"></i></button> 
-              - 
-              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam2 === 0" (click)="pointsTeam2Less()"><i class="fas fa-caret-down"></i></button>{{currentGame.pointsTeam2}}<button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam2More()"><i class="fas fa-caret-up"></i></button>
+              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam1 === 0" (click)="pointsTeam1Less()">
+                <i class="fas fa-caret-down"></i>
+              </button>{{currentGame.pointsTeam1}}
+              <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam1More()">
+                <i class="fas fa-caret-up"></i>
+              </button>
+              -
+              <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam2 === 0" (click)="pointsTeam2Less()">
+                <i class="fas fa-caret-down"></i>
+              </button>{{currentGame.pointsTeam2}}
+              <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam2More()">
+                <i class="fas fa-caret-up"></i>
+              </button>
             </div>
           </h4>
           <div *ngFor="let game of match.games" style="text-align: center; font-size: 15px">
             {{game.pointsTeam1}} - {{game.pointsTeam2}}
           </div>
           <div *ngIf="gameFinished && !matchFinished" style="text-align: center; font-size: 15px">
-            <button class="btn btn-sm btn-warning" (click)="newGame()"><i class="fas fa-plus"></i>  Nieuw set</button>
+            <button class="btn btn-sm btn-warning" (click)="newGame()">
+              <i class="fas fa-plus"></i> Nieuw set</button>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-dark mb-3" style="width: 100%; height: 100%;">
+        <div class="card-header text-center" style="font-size: 15px; font-weight: bold;">Acties</div>
+        <div class="card-body">
+          <button type="button" class="btn btn-success btn-lg btn-block" style="font-size: 12px;" (click)="startMatch()">Start wedstrijd</button>
+          <button type="button" [disabled]="!matchFinished" class="btn btn-danger btn-lg btn-block" style="font-size: 12px;" (click)="endMatch()">Einde wedstrijd</button>
         </div>
       </div>
     </div>
@@ -51,7 +81,7 @@
   <div class="row justify-content-center">
     <div *ngIf="match.type === 'MEN_SINGLE' || match.type === 'WOMEN_SINGLE'" class="col-md-6">
       <img [src]="courtImage" style="width: 100%;" />
-      <div  [ngClass]="{'bottom-left': !match.player1Left, 
+      <div [ngClass]="{'bottom-left': !match.player1Left, 
                           'top-left': match.player1Left}">
         <button class="btn btn-sm" [ngClass]="{'btn-success': match.serviceTeam1, 'btn-dark': !match.serviceTeam1}" style="font-size: 14px">{{match.player1}}</button>
       </div>
@@ -62,23 +92,21 @@
     </div>
     <div *ngIf="match.type !== 'MEN_SINGLE' && match.type !== 'WOMEN_SINGLE'" class="col-md-6">
       <img [src]="courtImage" style="width: 100%;" />
-      <div  [ngClass]="{'bottom-left': !match.player1Left, 
+      <div [ngClass]="{'bottom-left': !match.player1Left, 
                           'top-left': match.player1Left}">
         <button class="btn btn-sm" [ngClass]="{'btn-success': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && !match.player1Left),
                                               'btn-dark': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && !match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && match.player1Left)
-                                                          || !match.serviceTeam1}"
-        style="font-size: 14px">{{match.player1}}</button>
+                                                          || !match.serviceTeam1}" style="font-size: 14px">{{match.player1}}</button>
       </div>
-      <div  [ngClass]="{'bottom-left': match.player1Left, 
+      <div [ngClass]="{'bottom-left': match.player1Left, 
                           'top-left': !match.player1Left}">
         <button class="btn btn-sm" [ngClass]="{'btn-success': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && !match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && match.player1Left),
                                               'btn-dark': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && !match.player1Left)
-                                                          || !match.serviceTeam1}"
-        style="font-size: 14px">{{match.player3}}</button>
+                                                          || !match.serviceTeam1}" style="font-size: 14px">{{match.player3}}</button>
       </div>
       <div [ngClass]="{'top-right': !match.player2Left, 
                           'bottom-right': match.player2Left}">
@@ -86,8 +114,7 @@
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && !match.player2Left),
                                               'btn-dark': (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 > 0 && !match.player2Left)
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && match.player2Left)
-                                                          || match.serviceTeam1}"
-        style="font-size: 14px">{{match.player2}}</button>
+                                                          || match.serviceTeam1}" style="font-size: 14px">{{match.player2}}</button>
       </div>
       <div [ngClass]="{'top-right': match.player2Left, 
                           'bottom-right': !match.player2Left}">
@@ -95,8 +122,7 @@
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && match.player2Left),
                                               'btn-dark': (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 > 0 && match.player2Left)
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && !match.player2Left)
-                                                          || match.serviceTeam1}"
-        style="font-size: 14px">{{match.player4}}</button>
+                                                          || match.serviceTeam1}" style="font-size: 14px">{{match.player4}}</button>
       </div>
     </div>
   </div>
