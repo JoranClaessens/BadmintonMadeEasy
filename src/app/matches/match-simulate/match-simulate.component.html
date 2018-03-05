@@ -46,14 +46,14 @@
               <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam1 === 0" (click)="pointsTeam1Less()">
                 <i class="fas fa-caret-down"></i>
               </button>{{currentGame.pointsTeam1}}
-              <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam1More()">
+              <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished || !match.matchCreated" (click)="pointsTeam1More()">
                 <i class="fas fa-caret-up"></i>
               </button>
               -
               <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam2 === 0" (click)="pointsTeam2Less()">
                 <i class="fas fa-caret-down"></i>
               </button>{{currentGame.pointsTeam2}}
-              <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished" (click)="pointsTeam2More()">
+              <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished || !match.matchCreated" (click)="pointsTeam2More()">
                 <i class="fas fa-caret-up"></i>
               </button>
             </div>
@@ -72,8 +72,8 @@
       <div class="card border-dark mb-3" style="width: 100%; height: 100%;">
         <div class="card-header text-center" style="font-size: 15px; font-weight: bold;">Acties</div>
         <div class="card-body">
-          <button type="button" class="btn btn-success btn-lg btn-block" style="font-size: 12px;" (click)="startMatch()">Start wedstrijd</button>
-          <button type="button" [disabled]="!matchFinished" class="btn btn-danger btn-lg btn-block" style="font-size: 12px;" (click)="endMatch()">Einde wedstrijd</button>
+          <button type="button" [disabled]="match.matchCreated" class="btn btn-success btn-lg btn-block" style="font-size: 12px;" (click)="startMatch()">Start wedstrijd</button>
+          <button type="button" [disabled]="!matchFinished || match.matchFinished" class="btn btn-danger btn-lg btn-block" style="font-size: 12px;" (click)="endMatch()">Einde wedstrijd</button>
         </div>
       </div>
     </div>

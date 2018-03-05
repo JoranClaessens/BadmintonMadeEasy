@@ -35,7 +35,7 @@
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{match.title}}</h5>
         <small *ngIf="match.matchCreated && !match.matchFinished && match.duration > 1">{{match.duration}} minuten bezig...</small>
-        <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === 0">&lt; 1 minuut bezig...</small>
+        <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === '0'">&lt; 1 minuut bezig...</small>
         <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === 1">1 minuut bezig...</small>
         <small *ngIf="!match.matchCreated">Moet nog starten...</small>
         <small *ngIf="match.matchFinished">Wedstrijd afgelopen op {{match.matchFinished | date:'dd/MM/yyyy HH:mm:ss'}}</small>
