@@ -23,8 +23,7 @@ export class MatchEditComponent implements OnInit {
     this._matchService.getMatchById(id)
       .subscribe(
         match => {
-          this.match = match;
-          this.originalMatch = match;
+          this.organizeMatches(match);
         },
         error => {
           this.errorMessage = <any>error;
@@ -32,13 +31,22 @@ export class MatchEditComponent implements OnInit {
   }
 
   checkForChanges() {
+    this.anyChanges = false;
     for (const key in this.match) {
-      if (this.match[key] !== this.originalMatch[key]) {
+      if (this.match[key] !== this.originalMatch[key] && key !== 'games') {
+        console.log(this.match[key]);
+        console.log(this.originalMatch[key]);
         this.anyChanges = true;
       }
     }
-    if (this.match !== this.originalMatch) {
-      this.anyChanges = true;
+    for (let i = 0; i < this.match.games.length; i++) {
+      for (const key in this.match.games[i]) {
+        if (this.match.games[i][key] !== this.originalMatch.games[i][key]) {
+          console.log(this.match.games[i][key]);
+          console.log(this.originalMatch.games[i][key]);
+          this.anyChanges = true;
+        }
+      }
     }
   }
 
@@ -47,10 +55,25 @@ export class MatchEditComponent implements OnInit {
       .subscribe(
         match => {
           this.matchUpdated = true;
+          this.anyChanges = false;
+          this.organizeMatches(match);
         },
         error => {
           this.errorMessage = <any>error;
         });
+  }
+
+  organizeMatches(match: BadmintonMatch) {
+    this.originalMatch = null;
+    this.match = null;
+    this.originalMatch = Object.assign({}, match, this.originalMatch);
+    this.match = Object.assign({}, match, this.match);
+    this.originalMatch.games = Object.assign([], match.games, this.originalMatch.games);
+    this.match.games = Object.assign([], match.games, this.match.games);
+    for (let i = 0; i < match.games.length; i++) {
+      this.originalMatch.games[i] = Object.assign({}, match.games[i], this.originalMatch.games[i]);
+      this.match.games[i] = Object.assign({}, match.games[i], this.match.games[i]);
+    }
   }
 
   clearUpdateMessage() {

@@ -9,7 +9,7 @@
 <div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>Wedstrijd aanpassen</h1>
   <hr class="my-3">
-  <form>
+  <form *ngIf="match">
     <fieldset>
       <div class="form-group">
         <label for="matchTitle">Titel</label>
@@ -29,18 +29,28 @@
         <label>Spelers</label>
         <div class="row">
           <div class="col-md-5">
-            <input (change)="checkForChanges()" type="text" class="form-control" placeholder="Speler 1" name="speler1" [(ngModel)]="match.player1">
-            <input (change)="checkForChanges()" *ngIf="match.type === 'MEN_DOUBLE' || match.type === 'WOMEN_DOUBLE' || match.type === 'MIX'"
+            <input (keyup)="checkForChanges()" type="text" class="form-control" placeholder="Speler 1" name="speler1" [(ngModel)]="match.player1">
+            <input (keyup)="checkForChanges()" *ngIf="match.type === 'MEN_DOUBLE' || match.type === 'WOMEN_DOUBLE' || match.type === 'MIX'"
               type="text" class="form-control" placeholder="Speler 3" name="speler3" [(ngModel)]="match.player3">
           </div>
           <div class="col-md-2" style="display: flex; align-items: center; justify-content: center;">
             VS
           </div>
           <div class="col-md-5">
-            <input (change)="checkForChanges()" type="text" class="form-control" placeholder="Speler 2" name="speler2" [(ngModel)]="match.player2">
-            <input (change)="checkForChanges()" *ngIf="match.type === 'MEN_DOUBLE' || match.type === 'WOMEN_DOUBLE' || match.type === 'MIX'"
+            <input (keyup)="checkForChanges()" type="text" class="form-control" placeholder="Speler 2" name="speler2" [(ngModel)]="match.player2">
+            <input (keyup)="checkForChanges()" *ngIf="match.type === 'MEN_DOUBLE' || match.type === 'WOMEN_DOUBLE' || match.type === 'MIX'"
               type="text" class="form-control" placeholder="Speler 4" name="speler4" [(ngModel)]="match.player4">
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div *ngFor="let game of match.games" class="col-md-4 form-group">
+          <label>Set {{game.gamePk.gameId}}</label>
+          <div class="form-control">
+            <input (keyup)="checkForChanges()" (change)="checkForChanges()" type="number" style="width: 70px; text-align: center" name="{{'pointsTeam1Set' + game.gamePk.gameId}}" [(ngModel)]="game.pointsTeam1"> -
+            <input (keyup)="checkForChanges()" (change)="checkForChanges()" type="number" style="width: 70px; text-align: center" name="{{'pointsTeam2Set' + game.gamePk.gameId}}" [(ngModel)]="game.pointsTeam2">
+          </div>
+
         </div>
       </div>
       <button *ngIf="anyChanges" type="submit" class="btn btn-primary" (click)="updateMatch()">Opslaan</button>
