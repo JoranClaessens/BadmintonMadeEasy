@@ -21,6 +21,10 @@ export class MatchSimulateComponent implements OnInit {
   errorMessage: HttpErrorResponse;
   serviceTeam1 = false;
   serviceTeam2 = false;
+  showSwitch1Btn = false;
+  showSwitch2Btn = false;
+  showSwitch3Btn = false;
+  showSwitch4Btn = false;
 
   constructor(private _matchService: MatchService, private _route: ActivatedRoute) { }
 
@@ -103,6 +107,38 @@ export class MatchSimulateComponent implements OnInit {
     this.checkSinglePlayerLocations();
     this.currentGame.pointsTeam2--;
     this.updateGame();
+  }
+
+  updateService(team: number) {
+    if (team === 1) {
+      this.match.serviceTeam1 = true;
+    } else {
+      this.match.serviceTeam1 = false;
+    }
+    this._matchService.updateMatch(this.match)
+      .subscribe(
+        badmintonMatch => {
+          console.log('test');
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
+  }
+
+  switchSides(team: number) {
+    if (team === 1) {
+      this.match.player1Left = !this.match.player1Left;
+    } else {
+      this.match.player2Left = !this.match.player2Left;
+    }
+    this._matchService.updateMatch(this.match)
+      .subscribe(
+        badmintonMatch => {
+          console.log('test');
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 
   updateGame() {

@@ -45,14 +45,14 @@
             <div style="text-align: center; font-size: 50px">
               <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam1 === 0" (click)="pointsTeam1Less()">
                 <i class="fas fa-caret-down"></i>
-              </button>{{currentGame.pointsTeam1}}
+              </button> {{currentGame.pointsTeam1}}
               <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished || !match.matchCreated" (click)="pointsTeam1More()">
                 <i class="fas fa-caret-up"></i>
               </button>
               -
               <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="currentGame.pointsTeam2 === 0" (click)="pointsTeam2Less()">
                 <i class="fas fa-caret-down"></i>
-              </button>{{currentGame.pointsTeam2}}
+              </button> {{currentGame.pointsTeam2}}
               <button class="btn btn-sm" style="margin-left: 5px;" [disabled]="gameFinished || !match.matchCreated" (click)="pointsTeam2More()">
                 <i class="fas fa-caret-up"></i>
               </button>
@@ -81,48 +81,54 @@
   <div class="row justify-content-center">
     <div *ngIf="match.type === 'MEN_SINGLE' || match.type === 'WOMEN_SINGLE'" class="col-md-6">
       <img [src]="courtImage" style="width: 100%;" />
-      <div [ngClass]="{'bottom-left': !match.player1Left, 
-                          'top-left': match.player1Left}">
-        <button class="btn btn-sm" [ngClass]="{'btn-success': match.serviceTeam1, 'btn-dark': !match.serviceTeam1}" style="font-size: 14px">{{match.player1}}</button>
+      <div class="btn-group btn-group-toggle" [ngClass]="{'bottom-left': !match.player1Left, 
+                          'top-left': match.player1Left}" (mouseover)="showSwitch1Btn = true" (mouseleave)="showSwitch1Btn = false">
+        <button class="btn btn-sm" [ngClass]="{'btn-success': match.serviceTeam1, 'btn-dark': !match.serviceTeam1}" style="font-size: 14px" (click)="updateService(1)">{{match.player1}}</button>
+        <button class="btn btn-sm" *ngIf="showSwitch1Btn" (click)="switchSides(1)"><i class="fas fa-sync"></i></button>
       </div>
-      <div [ngClass]="{'top-right': !match.player2Left, 
-                          'bottom-right': match.player2Left}">
-        <button class="btn btn-sm" [ngClass]="{'btn-success': !match.serviceTeam1, 'btn-dark': match.serviceTeam1}" style="font-size: 14px">{{match.player2}}</button>
+      <div class="btn-group btn-group-toggle" [ngClass]="{'top-right': !match.player2Left, 
+                          'bottom-right': match.player2Left}" (mouseover)="showSwitch2Btn = true" (mouseleave)="showSwitch2Btn = false">
+        <button class="btn btn-sm" [ngClass]="{'btn-success': !match.serviceTeam1, 'btn-dark': match.serviceTeam1}" style="font-size: 14px" (click)="updateService(2)">{{match.player2}}</button>
+        <button class="btn btn-sm" *ngIf="showSwitch2Btn" (click)="switchSides(2)"><i class="fas fa-sync"></i></button>
       </div>
     </div>
     <div *ngIf="match.type !== 'MEN_SINGLE' && match.type !== 'WOMEN_SINGLE'" class="col-md-6">
       <img [src]="courtImage" style="width: 100%;" />
-      <div [ngClass]="{'bottom-left': !match.player1Left, 
-                          'top-left': match.player1Left}">
+      <div class="btn-group btn-group-toggle" [ngClass]="{'bottom-left': !match.player1Left, 
+                          'top-left': match.player1Left}" (mouseover)="showSwitch1Btn = true" (mouseleave)="showSwitch1Btn = false">
         <button class="btn btn-sm" [ngClass]="{'btn-success': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && !match.player1Left),
                                               'btn-dark': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && !match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && match.player1Left)
-                                                          || !match.serviceTeam1}" style="font-size: 14px">{{match.player1}}</button>
+                                                          || !match.serviceTeam1}" style="font-size: 14px" (click)="updateService(1)">{{match.player1}}</button>
+        <button class="btn btn-sm" *ngIf="showSwitch1Btn" (click)="switchSides(1)"><i class="fas fa-sync"></i></button>
       </div>
-      <div [ngClass]="{'bottom-left': match.player1Left, 
-                          'top-left': !match.player1Left}">
+      <div class="btn-group btn-group-toggle" [ngClass]="{'bottom-left': match.player1Left, 
+                          'top-left': !match.player1Left}" (mouseover)="showSwitch3Btn = true" (mouseleave)="showSwitch3Btn = false">
         <button class="btn btn-sm" [ngClass]="{'btn-success': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && !match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && match.player1Left),
                                               'btn-dark': (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 > 0 && match.player1Left)
                                                           || (match.serviceTeam1 && this.currentGame.pointsTeam1 % 2 === 0 && !match.player1Left)
-                                                          || !match.serviceTeam1}" style="font-size: 14px">{{match.player3}}</button>
+                                                          || !match.serviceTeam1}" style="font-size: 14px" (click)="updateService(1)">{{match.player3}}</button>
+        <button class="btn btn-sm" *ngIf="showSwitch3Btn" (click)="switchSides(1)"><i class="fas fa-sync"></i></button>
       </div>
-      <div [ngClass]="{'top-right': !match.player2Left, 
-                          'bottom-right': match.player2Left}">
+      <div class="btn-group btn-group-toggle" [ngClass]="{'top-right': !match.player2Left, 
+                          'bottom-right': match.player2Left}" (mouseover)="showSwitch2Btn = true" (mouseleave)="showSwitch2Btn = false">
         <button class="btn btn-sm" [ngClass]="{'btn-success': (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 > 0 && match.player2Left)
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && !match.player2Left),
                                               'btn-dark': (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 > 0 && !match.player2Left)
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && match.player2Left)
-                                                          || match.serviceTeam1}" style="font-size: 14px">{{match.player2}}</button>
+                                                          || match.serviceTeam1}" style="font-size: 14px" (click)="updateService(2)">{{match.player2}}</button>
+        <button class="btn btn-sm" *ngIf="showSwitch2Btn" (click)="switchSides(2)"><i class="fas fa-sync"></i></button>
       </div>
-      <div [ngClass]="{'top-right': match.player2Left, 
-                          'bottom-right': !match.player2Left}">
+      <div class="btn-group btn-group-toggle" [ngClass]="{'top-right': match.player2Left, 
+                          'bottom-right': !match.player2Left}" (mouseover)="showSwitch4Btn = true" (mouseleave)="showSwitch4Btn = false">
         <button class="btn btn-sm" [ngClass]="{'btn-success': (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 > 0 && !match.player2Left)
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && match.player2Left),
                                               'btn-dark': (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 > 0 && match.player2Left)
                                                           || (!match.serviceTeam1 && this.currentGame.pointsTeam2 % 2 === 0 && !match.player2Left)
-                                                          || match.serviceTeam1}" style="font-size: 14px">{{match.player4}}</button>
+                                                          || match.serviceTeam1}" style="font-size: 14px" (click)="updateService(2)">{{match.player4}}</button>
+        <button class="btn btn-sm" *ngIf="showSwitch4Btn" (click)="switchSides(2)"><i class="fas fa-sync"></i></button>
       </div>
     </div>
   </div>
