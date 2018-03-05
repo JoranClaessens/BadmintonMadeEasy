@@ -79,7 +79,16 @@ export class MatchDetailComponent implements OnInit, OnDestroy {
   }
 
   deleteMatch() {
-    this._router.navigate(['/haha']);
+    this._matchService.deleteMatch(this.match.id)
+      .subscribe(
+        badmintonmatch => {
+          if (!badmintonmatch) {
+            this._router.navigate(['/matches']);
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 
   checkGame() {

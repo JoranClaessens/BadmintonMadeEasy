@@ -62,6 +62,12 @@ export class MatchService {
             .catch(this.handleError);
     }
 
+    deleteMatch(matchId: number): Observable<BadmintonMatch> {
+        return this._http.delete<BadmintonMatch>(this.matchUrl + '/' + matchId)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     private handleError(err: HttpErrorResponse) {
         console.log(err.message);
         return Observable.throw(err.message);
