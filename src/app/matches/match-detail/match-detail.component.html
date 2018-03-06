@@ -6,9 +6,9 @@
       <div class="card border-dark mb-3" style="width: 100%; height: 100%;">
         <div class="card-header text-center" style="font-size: 15px; font-weight: bold;">Locatie</div>
         <div class="text-center text-info" style="font-size: 18px; margin-top: 25px;">
-          <p>Oorsprongstraat 4</p>
-          <p>3840 Borgloon</p>
-          <p>Baan 1</p>
+          <p *ngIf="match.street">{{match.street}}</p>
+          <p *ngIf="match.city">{{match.city}}</p>
+          <p *ngIf="match.terrainNumber">Terrein {{match.terrainNumber}}</p>
         </div>
       </div>
     </div>
@@ -28,26 +28,28 @@
           </div>
           <div *ngIf="match.type !== 'MEN_SINGLE' && match.type !== 'WOMEN_SINGLE'" class="row">
             <div class="col-md-5" style="font-weight: bold; text-align: right; font-size: 30px;">
-              {{match.player1}}
-              <br>{{match.player3}}
+              {{match.player1}}<br>{{match.player3}}
             </div>
             <div class="col-md-2" style="font-weight: bold; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center;">
               VS
             </div>
             <div class="col-md-5" style="font-weight: bold; text-align: left; font-size: 30px;">
-              {{match.player2}}
-              <br>{{match.player4}}
+              {{match.player2}}<br>{{match.player4}}
             </div>
           </div>
         </div>
         <div class="card-body">
-          <h4 class="card-title">
+          <h4 class="card-title" style="font-weight: normal">
             <div style="text-align: center; font-size: 50px">
-              {{match.games[match.games.length - 1].pointsTeam1}} - {{match.games[match.games.length - 1].pointsTeam2}}
+              <span [ngStyle]="{'font-weight': getFontWeight(match.games[match.games.length - 1].pointsTeam1, match.games[match.games.length - 1].pointsTeam2)}">{{match.games[match.games.length - 1].pointsTeam1}}</span>
+              <span> - </span>
+              <span [ngStyle]="{'font-weight': getFontWeight(match.games[match.games.length - 1].pointsTeam2, match.games[match.games.length - 1].pointsTeam1)}">{{match.games[match.games.length - 1].pointsTeam2}}</span>
             </div>
           </h4>
           <div *ngFor="let game of match.games" style="text-align: center; font-size: 15px">
-            {{game.pointsTeam1}} - {{game.pointsTeam2}}
+            <span [ngStyle]="{'font-weight': getFontWeight(game.pointsTeam1, game.pointsTeam2)}">{{game.pointsTeam1}}</span>
+            <span> - </span>
+            <span [ngStyle]="{'font-weight': getFontWeight(game.pointsTeam2, game.pointsTeam1)}">{{game.pointsTeam2}}</span>
           </div>
         </div>
       </div>
@@ -56,7 +58,8 @@
       <div class="card border-dark mb-3" style="width: 100%; height: 100%;">
         <div class="card-header text-center" style="font-size: 15px; font-weight: bold;">Acties</div>
         <div class="card-body" *ngIf="hasAuthority">
-          <button type="button" class="btn btn-primary btn-lg btn-block" style="font-size: 12px;" [disabled]="match.matchFinished" (click)="simulateMatch()">Simuleer wedstrijd</button>
+          <button type="button" class="btn btn-primary btn-lg btn-block" style="font-size: 12px;" [disabled]="match.matchFinished"
+            (click)="simulateMatch()">Simuleer wedstrijd</button>
           <button type="button" class="btn btn-warning btn-lg btn-block" style="font-size: 12px;" (click)="editMatch()">Gegevens aanpassen</button>
           <button type="button" class="btn btn-danger btn-lg btn-block" style="font-size: 12px;" (click)="deleteMatch()">Verwijder wedstrijd</button>
         </div>

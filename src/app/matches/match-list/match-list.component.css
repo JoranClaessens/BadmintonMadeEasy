@@ -1,0 +1,13 @@
+.progress-ww {
+  font-size: 0.8rem;
+  line-height:0.8rem;
+  text-align:center;
+}
+.progress-ww span {
+    display:inline-block;
+    width:100px;
+    text-align:left;
+}
+.progress-ww span:first-of-type {
+    text-align:right
+}

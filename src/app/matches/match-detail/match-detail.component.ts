@@ -106,4 +106,11 @@ export class MatchDetailComponent implements OnInit, OnDestroy {
       }, 1000);
     }
   }
+
+  getFontWeight(points1: number, points2: number): string {
+    if (points1 > points2) {
+      return 'bold';
+    }
+    return null;
+  }
 }

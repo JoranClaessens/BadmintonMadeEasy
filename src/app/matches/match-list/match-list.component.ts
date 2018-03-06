@@ -92,6 +92,13 @@ export class MatchListComponent implements OnInit {
     }
   }
 
+  getFontWeight(points1: number, points2: number): string {
+    if (points1 > points2) {
+      return 'bold';
+    }
+    return null;
+  }
+
   clearErrorMessage() {
     this.errorMessage = null;
   }

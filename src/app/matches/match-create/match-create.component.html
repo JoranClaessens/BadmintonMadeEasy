@@ -45,6 +45,23 @@
           </div>
         </div>
       </div>
+      <div style="margin-bottom: 10px;">
+        <button class="btn btn-sm btn-info" (click)="createLocation = !createLocation"><i class="fas fa-plus"></i> Locatie toevoegen</button><span> *Optioneel</span>
+      </div>
+      <div *ngIf="createLocation">
+        <div class="form-group">
+          <label for="street">Straat + Huisnummer</label>
+          <input type="text" class="form-control" name="street" placeholder="Straat + Huisnummer" [(ngModel)]="street">
+        </div>
+        <div class="form-group">
+          <label>Plaats</label>
+          <input type="text" class="form-control" name="city" placeholder="Postcode + Gemeente" [(ngModel)]="city">
+        </div>
+        <div class="form-group">
+            <label for="terrainNumber">Terrein nummer</label>
+            <input type="text" class="form-control" name="terrainNumber" placeholder="Terrein nummer" [(ngModel)]="terrainNumber">
+        </div>
+      </div>
       <button type="submit" class="btn btn-primary" (click)="createMatch()">Opslaan</button>
     </fieldset>
   </form>

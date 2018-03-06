@@ -12,6 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class MatchEditComponent implements OnInit {
   matchUpdated = false;
   anyChanges = false;
+  changeLocation = false;
   originalMatch: BadmintonMatch;
   match: BadmintonMatch;
   errorMessage: HttpErrorResponse;

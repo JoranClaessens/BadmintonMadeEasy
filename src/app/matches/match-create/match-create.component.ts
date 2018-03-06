@@ -18,8 +18,13 @@ export class MatchCreateComponent implements OnInit {
   player2: string;
   player3: string;
   player4: string;
+  street: string;
+  postalCode: string;
+  city: string;
+  terrainNumber: string;
   errorMessage: HttpErrorResponse;
   matchCreated = false;
+  createLocation = false;
 
   constructor(private _matchService: MatchService, private _userService: UserService) { }
 
@@ -28,7 +33,8 @@ export class MatchCreateComponent implements OnInit {
 
   createMatch() {
     this._matchService.createMatch(new BadmintonMatch(this.matchTitle, this.selectedMatchType,
-      this.player1, this.player2, this.player3, this.player4), this._userService.getUser().id)
+      this.player1, this.player2, this.player3, this.player4, this.street, this.city, this.terrainNumber),
+        this._userService.getUser().id)
       .subscribe(
         badmintonMatch => {
           if (badmintonMatch) {
