@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../account/user.service';
+import { TournamentService } from '../tournament.service';
+import { Tournament } from '../tournament';
 
 @Component({
   selector: 'bme-tournament-create',
@@ -18,26 +20,25 @@ export class TournamentCreateComponent implements OnInit {
   tournamentCreated = false;
   createLocation = false;
 
-  constructor(private _userService: UserService) { }
+  constructor(private _tournamentService: TournamentService, private _userService: UserService) { }
 
   ngOnInit() {
   }
 
   createTournament() {
-    /*this._matchService.createMatch(new BadmintonMatch(this.matchTitle, this.selectedMatchType,
-      this.player1, this.player2, this.player3, this.player4, this.street, this.city, this.terrainNumber),
-        this._userService.getUser().id)
+    this._tournamentService.createTournament(new Tournament(this.title, this.numberOfTeams, this.selectedMatchType,
+      this.street, this.city), this._userService.getUser().id)
       .subscribe(
-        badmintonMatch => {
-          if (badmintonMatch) {
-            this.matchId = badmintonMatch.id;
-            this.matchCreated = true;
+        tournament => {
+          if (tournament) {
+            this.tournamentId = tournament.id;
+            this.tournamentCreated = true;
             this.clearForm();
           }
         },
         error => {
           this.errorMessage = <any>error;
-        });*/
+        });
   }
 
   clearErrorMessage() {
@@ -48,5 +49,8 @@ export class TournamentCreateComponent implements OnInit {
     this.title = null;
     this.selectedMatchType = 'NONE';
     this.numberOfTeams = null;
+    this.street = null;
+    this.city = null;
+    this.createLocation = false;
   }
 }

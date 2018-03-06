@@ -59,5 +59,9 @@ export class MatchCreateComponent implements OnInit {
     this.player2 = null;
     this.player3 = null;
     this.player4 = null;
+    this.street = null;
+    this.city = null;
+    this.terrainNumber = null;
+    this.createLocation = false;
   }
 }
