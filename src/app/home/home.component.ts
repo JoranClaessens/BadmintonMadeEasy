@@ -27,6 +27,14 @@ export class HomeComponent implements OnInit {
     this._router.navigate(['/matches']);
   }
 
+  startTournament() {
+    if (this._userService.getUser()) {
+      this._router.navigate(['/tournaments/create']);
+    } else {
+      this.showNotLoggedIn = true;
+    }
+  }
+
   searchTournament() {
     this._router.navigate(['/tournaments']);
   }

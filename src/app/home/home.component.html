@@ -1,6 +1,6 @@
 <div *ngIf="showNotLoggedIn" class="alert alert-dismissible alert-warning container">
     <button type="button" class="close" data-dismiss="alert" (click)="clearWarningMessage()">&times;</button>
-    U moet eerst aangemeld zijn om een wedstrijd te kunnen aanmaken!
+    U moet eerst aangemeld zijn om een wedstrijd, toernooi of competitiepartij te kunnen aanmaken!
     <a [routerLink]="['/account/login']" class="alert-link">Aanmelden</a>
     of
     <a [routerLink]="['/account/create']" class="alert-link">Registreer nu</a>
@@ -26,7 +26,7 @@
                 <div class="card mb-3 border-dark">
                     <h3 class="card-header bg-warning" style="text-align: center; height: 80px; display: flex; align-items: center; justify-content: center; color: white;">Start een toernooi!</h3>
                     <div class="card-body">
-                        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;" (click)="startMatch()">Start toernooi</button>
+                        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;" (click)="startTournament()">Start toernooi</button>
                         <p style="text-align: center; font-size: 25px; margin-top: 10px;">Of</p>
                         <button type="button" class="btn btn-warning btn-lg" style="width: 100%; margin-top: -20px;" (click)="searchTournament()">Zoek toernooi</button>
                     </div>
