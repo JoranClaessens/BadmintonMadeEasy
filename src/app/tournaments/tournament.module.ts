@@ -5,6 +5,7 @@ import { TournamentCreateComponent } from './tournament-create/tournament-create
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TournamentService } from './tournament.service';
+import { TournamentDetailComponent } from './tournament-detail/tournament-detail.component';
 
 @NgModule({
   imports: [
@@ -14,8 +15,9 @@ import { TournamentService } from './tournament.service';
   ],
   declarations: [
     TournamentListComponent,
-    TournamentCreateComponent
-  ],
+    TournamentCreateComponent,
+    TournamentDetailComponent
+],
   providers: [
     TournamentService
   ]

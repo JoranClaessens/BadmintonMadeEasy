@@ -15,6 +15,7 @@ import { AccountCreateComponent } from './account/account-create/account-create.
 import { MatchSimulateComponent } from './matches/match-simulate/match-simulate.component';
 import { MatchEditComponent } from './matches/match-edit/match-edit.component';
 import { TournamentCreateComponent } from './tournaments/tournament-create/tournament-create.component';
+import { TournamentDetailComponent } from './tournaments/tournament-detail/tournament-detail.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
   { path: 'matches/:id', component: MatchDetailComponent },
   { path: 'tournaments', component: TournamentListComponent },
   { path: 'tournaments/create', component: TournamentCreateComponent },
+  { path: 'tournaments/:id', component: TournamentDetailComponent },
   { path: 'competitions', component: CompetitionListComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
