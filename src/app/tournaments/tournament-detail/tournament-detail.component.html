@@ -1,16 +1,55 @@
-<div class="container-fluid" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
-  <h1>Toernooi</h1>
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container-fluid">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage}}
+</div>
+<div *ngIf="tournament" class="container-fluid" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
+  <h1>{{tournament.title}}</h1>
   <main>
     <ul *ngFor="let round of rounds" class="round round-{{round}}">
       <li *ngIf="round !== rounds.length" class="spacer">&nbsp;</li>
       <ng-container *ngFor="let match of getMatchRounds(round)">
         <ng-container *ngIf="match">
-          <li class="game game-top">{{getPlayer(round, match, 1)}}
-            <span>79</span>
+          <li class="game game-top" (mouseenter)="showInput = true" (mouseleave)="showInput = false">
+
+            <ng-container *ngIf="round !== 1 && getMatch(getPlayer(round - 1, match * 2 - 1, 1), getPlayer(round - 1,  match * 2 - 1, 0))
+            && !getMatch(getPlayer(round - 1, match * 2 - 1, 1), getPlayer(round - 1,  match * 2 - 1, 0)).matchFinished">
+              <a [routerLink]="['/matches/' + getMatch(getPlayer(round - 1, match * 2 - 1, 1), getPlayer(round - 1,  match * 2 - 1, 0)).id]">Bekijk wedstrijd</a>
+            </ng-container>
+
+            <ng-container *ngIf="showInput && round === 1">
+              <input type="text" style="height: 18px; width: 140px; font-size: 13px;" value="{{getPlayer(round, match, 1)}}" />
+            </ng-container>
+
+            <ng-container *ngIf="!showInput || (showInput && round !== 1)">
+              <ng-container *ngIf="getPlayer(round, match, 1)">{{getPlayer(round, match, 1)}}</ng-container>
+            </ng-container>
+
+            <span>&nbsp;</span>
           </li>
+
+          <li *ngIf="getGamePoints(getMatch(getPlayer(round - 1, match * 2 - 1, 1), getPlayer(round - 1,  match * 2 - 1, 0)))" class="game game-bottom"
+            style="margin-bottom: -20px; border-style: none;">
+            {{getGamePoints(getMatch(getPlayer(round - 1, match * 2 - 1, 1), getPlayer(round - 1, match * 2 - 1, 0)))}}
+          </li>
+
           <li class="game game-spacer">&nbsp;</li>
-          <li class="game game-bottom ">{{getPlayer(round, match, 0)}}
-            <span>48</span>
+
+          <li class="game game-top" style="margin-top: -20px;" (mouseenter)="showInput = true" (mouseleave)="showInput = false">
+
+            <ng-container *ngIf="round !== 1 && getMatch(getPlayer(round - 1, match * 2, 1), getPlayer(round - 1,  match * 2, 0))
+              && !getMatch(getPlayer(round - 1, match * 2, 1), getPlayer(round - 1,  match * 2, 0)).matchFinished">
+              <a [routerLink]="['/matches/' + getMatch(getPlayer(round - 1, match * 2, 1), getPlayer(round - 1,  match * 2, 0)).id]">Bekijk wedstrijd</a>
+            </ng-container>
+
+            <ng-container *ngIf="showInput && round === 1">
+              <input type="text" style="height: 18px; width: 140px; font-size: 13px;" value="{{getPlayer(round, match, 0)}}" />
+            </ng-container>
+
+            <ng-container *ngIf="!showInput || (showInput && round !== 1)">
+              <ng-container *ngIf="getPlayer(round, match, 0)">{{getPlayer(round, match, 0)}}</ng-container>
+            </ng-container>
+
+            <span>&nbsp;</span>
           </li>
 
           <li class="spacer">&nbsp;</li>

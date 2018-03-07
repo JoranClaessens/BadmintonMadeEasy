@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { TournamentPlayer } from '../tournament-player';
+import { MatchService } from '../../matches/match.service';
+import { BadmintonMatch } from '../../matches/badminton-match';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
+import { TournamentService } from '../tournament.service';
+import { Tournament } from '../tournament';
 
 @Component({
   selector: 'bme-tournament-detail',
@@ -7,9 +13,11 @@ import { TournamentPlayer } from '../tournament-player';
   styleUrls: ['./tournament-detail.component.css']
 })
 export class TournamentDetailComponent implements OnInit {
-  numberOfTeams = 16;
+  showInput = false;
+  tournament: Tournament;
   tournamentPlayers: TournamentPlayer[];
-  tournamentPlayer = new TournamentPlayer('Joran Claessens', 1, 1);
+  badmintonMatches = new Array<BadmintonMatch>();
+  errorMessage: HttpErrorResponse;
   rounds: number[];
   round1: number;
   round2: number;
@@ -21,40 +29,38 @@ export class TournamentDetailComponent implements OnInit {
   round8: number;
   round9: number;
 
-  constructor() { }
+  constructor(private _tournamentService: TournamentService, private _matchService: MatchService,
+    private _router: Router, private _route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.tournamentPlayers = new Array<TournamentPlayer>();
-    this.tournamentPlayers.push(new TournamentPlayer('Joran Claessens', 1, 1));
-    this.tournamentPlayers.push(new TournamentPlayer('Pol Biesmans', 1, 2));
-    this.tournamentPlayers.push(new TournamentPlayer('Pol Biesmans', 2, 1));
-    this.test();
+    const id = +this._route.snapshot.paramMap.get('id');
+    this.initialize(id);
   }
 
-  test() {
-    if (this.numberOfTeams <= 2) {
+  createBracket() {
+    if (this.tournament.numberOfTeams <= 2) {
       this.rounds = Array(2).fill(1).map((x, i) => i + 1);
       this.round1 = 1;
       this.round2 = 0;
-    } else if (this.numberOfTeams <= 4) {
+    } else if (this.tournament.numberOfTeams <= 4) {
       this.rounds = Array(3).fill(1).map((x, i) => i + 1);
       this.round1 = 2;
       this.round2 = 1;
       this.round3 = 0;
-    } else if (this.numberOfTeams <= 8) {
+    } else if (this.tournament.numberOfTeams <= 8) {
       this.rounds = Array(4).fill(1).map((x, i) => i + 1);
       this.round1 = 4;
       this.round2 = 2;
       this.round3 = 1;
       this.round4 = 0;
-    } else if (this.numberOfTeams <= 16) {
+    } else if (this.tournament.numberOfTeams <= 16) {
       this.rounds = Array(5).fill(1).map((x, i) => i + 1);
       this.round1 = 8;
       this.round2 = 4;
       this.round3 = 2;
       this.round4 = 1;
       this.round5 = 0;
-    } else if (this.numberOfTeams <= 32) {
+    } else if (this.tournament.numberOfTeams <= 32) {
       this.rounds = Array(6).fill(1).map((x, i) => i + 1);
       this.round1 = 16;
       this.round2 = 8;
@@ -62,7 +68,7 @@ export class TournamentDetailComponent implements OnInit {
       this.round4 = 2;
       this.round5 = 1;
       this.round6 = 0;
-    } else if (this.numberOfTeams <= 64) {
+    } else if (this.tournament.numberOfTeams <= 64) {
       this.rounds = Array(7).fill(1).map((x, i) => i + 1);
       this.round1 = 32;
       this.round2 = 16;
@@ -71,7 +77,7 @@ export class TournamentDetailComponent implements OnInit {
       this.round5 = 2;
       this.round6 = 1;
       this.round7 = 0;
-    } else if (this.numberOfTeams <= 128) {
+    } else if (this.tournament.numberOfTeams <= 128) {
       this.rounds = Array(8).fill(1).map((x, i) => i + 1);
       this.round1 = 64;
       this.round2 = 32;
@@ -81,7 +87,7 @@ export class TournamentDetailComponent implements OnInit {
       this.round6 = 2;
       this.round7 = 1;
       this.round8 = 0;
-    } else if (this.numberOfTeams <= 256) {
+    } else if (this.tournament.numberOfTeams <= 256) {
       this.rounds = Array(9).fill(1).map((x, i) => i + 1);
       this.round1 = 128;
       this.round2 = 64;
@@ -93,8 +99,6 @@ export class TournamentDetailComponent implements OnInit {
       this.round8 = 1;
       this.round9 = 0;
     }
-    console.log(this.rounds);
-    console.log(this.round1);
   }
 
   getMatchRounds(round: number): number[] {
@@ -112,14 +116,71 @@ export class TournamentDetailComponent implements OnInit {
   }
 
   getPlayer(round: number, match: number, position: number): string {
-    for (let i = 0; i < this.tournamentPlayers.length; i++) {
-      if (round === this.tournamentPlayers[i].round && match === Math.ceil(this.tournamentPlayers[i].position / 2) &&
-         position === this.tournamentPlayers[i].position % 2) {
-        return this.tournamentPlayers[i].name;
+    for (let i = 0; i < this.tournament.players.length; i++) {
+      if (round === this.tournament.players[i].round && match === Math.ceil(this.tournament.players[i].position / 2) &&
+        position === this.tournament.players[i].position % 2) {
+        return this.tournament.players[i].name;
       }
-      console.log(this.tournamentPlayers[i].position / 2);
     }
     return null;
+  }
+
+  getMatch(player1: string, player2: string): BadmintonMatch {
+    if (this.badmintonMatches.length === this.tournament.matches.length) {
+      for (let i = 0; i < this.badmintonMatches.length; i++) {
+        if (player1 && player2 && this.badmintonMatches[i].player1 != null && this.badmintonMatches[i].player2 != null) {
+          if (this.badmintonMatches[i].player1 === player1 && this.badmintonMatches[i].player2 === player2) {
+            return this.badmintonMatches[i];
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  getGamePoints(match: BadmintonMatch) {
+    if (this.badmintonMatches.length === this.tournament.matches.length) {
+      if (match) {
+        let returnString = '';
+        for (let i = 0; i < match.games.length; i++) {
+          returnString += match.games[i].pointsTeam1 + '-' + match.games[i].pointsTeam2 + ' ';
+        }
+        return returnString;
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  checkForMatches() {
+    for (let j = 0; j < this.rounds.length; j++) {
+      const matches = this.getMatchRounds(this.rounds[j]);
+      for (let x = 0; x < matches.length; x++) {
+        const playerNames = new Array<string>();
+        for (let i = 0; i < this.tournament.players.length; i++) {
+          if (this.rounds[j] === this.tournament.players[i].round && matches[x] === Math.ceil(this.tournament.players[i].position / 2)) {
+            playerNames.push(this.tournament.players[i].name);
+          }
+        }
+        if (playerNames.length === 2) {
+          this._matchService.getMatchByPlayerNames(playerNames[0], playerNames[1], this.tournament.id)
+            .subscribe(
+              badmintonMatch => {
+                if (badmintonMatch) {
+                  this.badmintonMatches.push(badmintonMatch);
+                  if (this.badmintonMatches.length === 1) {
+                    this._router.navigate(['/tournaments/1']);
+                  }
+                }
+              },
+              error => {
+                this.errorMessage = <any>error;
+              });
+        }
+        console.log(playerNames);
+      }
+    }
   }
 
   checkLastRound(matchRound: number): boolean {
@@ -127,5 +188,22 @@ export class TournamentDetailComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  clearErrorMessage() {
+    this.errorMessage = null;
+  }
+
+  initialize(tournamentId: number) {
+    this._tournamentService.getTournamentById(tournamentId)
+      .subscribe(
+        tournament => {
+          this.tournament = tournament;
+          this.createBracket();
+          this.checkForMatches();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 }

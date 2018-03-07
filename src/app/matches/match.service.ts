@@ -38,6 +38,12 @@ export class MatchService {
             .catch(this.handleError);
     }
 
+    getMatchByPlayerNames(player1: string, player2: string, tournamentId: number): Observable<BadmintonMatch> {
+        return this._http.get<BadmintonMatch>(this.matchUrl + '/' + player1 + '/' + player2 + '/' + tournamentId)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     createMatch(badmintonMatch: BadmintonMatch, userId: number): Observable<BadmintonMatch> {
         return this._http.post<BadmintonMatch>(this.matchUrl + '/create/' + userId, badmintonMatch)
             .do(data => console.log('All: ' + JSON.stringify(data)))
