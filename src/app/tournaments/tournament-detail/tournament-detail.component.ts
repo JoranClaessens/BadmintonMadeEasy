@@ -153,6 +153,20 @@ export class TournamentDetailComponent implements OnInit {
     return null;
   }
 
+  startMatch(player1: string, player2: string) {
+    this._tournamentService.createMatch(new BadmintonMatch(this.tournament.title, this.tournament.type,
+      player1, player2, null, null, this.tournament.street, this.tournament.city, null), 1, this.tournament.id)
+      .subscribe(
+        badmintonMatch => {
+          if (badmintonMatch) {
+            this._router.navigate(['/matches/' + badmintonMatch.id]);
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
+  }
+
   checkForMatches() {
     for (let j = 0; j < this.rounds.length; j++) {
       const matches = this.getMatchRounds(this.rounds[j]);
@@ -178,7 +192,6 @@ export class TournamentDetailComponent implements OnInit {
                 this.errorMessage = <any>error;
               });
         }
-        console.log(playerNames);
       }
     }
   }
@@ -188,6 +201,63 @@ export class TournamentDetailComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  scheduleTournament() {
+    this.tournament.scheduled = true;
+    for (let i = 1; i <= this.getMatchRounds(1).length; i++) {
+      if (!this.getPlayer(1, i, 1) && this.getPlayer(1, i, 0)) {
+        console.log(Math.ceil(i / 2));
+        this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 0), 2, i));
+      } else if (this.getPlayer(1, i, 1) && !this.getPlayer(1, i, 0)) {
+        this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 1), 2, i));
+      }
+    }
+    this.updateTournament();
+  }
+
+  updateTournamentPlayer(newValue: string, round: number, match: number, position: number, newPosition: number) {
+    const player = this.getPlayer(round, match, position);
+    if (player) {
+      for (let i = 0; i < this.tournament.players.length; i++) {
+        if (this.tournament.players[i].name === player) {
+          if (newValue && newValue !== '') {
+            this.tournament.players[i].name = newValue;
+            this.updateTournament();
+          } else {
+            this._tournamentService.deleteTournamentPlayer(this.tournament.players[i])
+              .subscribe(
+                tournamentPlayer => {
+                  if (!tournamentPlayer) {
+                    this.tournament.players.splice(i, 1);
+                    this.updateTournament();
+                  }
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                });
+          }
+        }
+      }
+    } else {
+      if (newValue && newValue !== '') {
+        this.tournament.players.push(new TournamentPlayer(newValue, round, newPosition));
+        this.updateTournament();
+      }
+    }
+  }
+
+  updateTournament() {
+    this._tournamentService.updateTournament(this.tournament)
+      .subscribe(
+        tournament => {
+          if (tournament) {
+            this.initialize(tournament.id);
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 
   clearErrorMessage() {

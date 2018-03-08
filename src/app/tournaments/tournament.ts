@@ -12,6 +12,7 @@ export class Tournament {
     user: User;
     street: string;
     city: string;
+    scheduled: boolean;
 
     constructor(title: string, numberOfTeams: number, type: string, street: string, city: string) {
         this.title = title;
@@ -19,5 +20,6 @@ export class Tournament {
         this.type = type;
         this.street = street;
         this.city = city;
+        this.scheduled = false;
     }
 }
