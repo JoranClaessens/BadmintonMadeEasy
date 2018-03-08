@@ -126,12 +126,10 @@ export class TournamentDetailComponent implements OnInit {
   }
 
   getMatch(player1: string, player2: string): BadmintonMatch {
-    if (this.badmintonMatches.length === this.tournament.matches.length) {
-      for (let i = 0; i < this.badmintonMatches.length; i++) {
-        if (player1 && player2 && this.badmintonMatches[i].player1 != null && this.badmintonMatches[i].player2 != null) {
-          if (this.badmintonMatches[i].player1 === player1 && this.badmintonMatches[i].player2 === player2) {
-            return this.badmintonMatches[i];
-          }
+    for (let i = 0; i < this.tournament.matches.length; i++) {
+      if (player1 && player2 && this.tournament.matches[i].player1 && this.tournament.matches[i].player2) {
+        if (this.tournament.matches[i].player1 === player1 && this.tournament.matches[i].player2 === player2) {
+          return this.tournament.matches[i];
         }
       }
     }
@@ -139,18 +137,15 @@ export class TournamentDetailComponent implements OnInit {
   }
 
   getGamePoints(match: BadmintonMatch) {
-    if (this.badmintonMatches.length === this.tournament.matches.length) {
-      if (match) {
-        let returnString = '';
-        for (let i = 0; i < match.games.length; i++) {
-          returnString += match.games[i].pointsTeam1 + '-' + match.games[i].pointsTeam2 + ' ';
-        }
-        return returnString;
-      } else {
-        return null;
+    if (match) {
+      let returnString = '';
+      for (let i = 0; i < match.games.length; i++) {
+        returnString += match.games[i].pointsTeam1 + '-' + match.games[i].pointsTeam2 + ' ';
       }
+      return returnString;
+    } else {
+      return null;
     }
-    return null;
   }
 
   startMatch(player1: string, player2: string) {
@@ -183,9 +178,8 @@ export class TournamentDetailComponent implements OnInit {
               badmintonMatch => {
                 if (badmintonMatch) {
                   this.badmintonMatches.push(badmintonMatch);
-                  if (this.badmintonMatches.length === 1) {
-                    this._router.navigate(['/tournaments/1']);
-                  }
+                  // if (this.badmintonMatches.length === 1)
+                  this._router.navigate(['/tournaments/' + this.tournament.id]);
                 }
               },
               error => {
@@ -270,7 +264,8 @@ export class TournamentDetailComponent implements OnInit {
         tournament => {
           this.tournament = tournament;
           this.createBracket();
-          this.checkForMatches();
+          // this._router.navigate(['/tournaments/' + this.tournament.id]);
+          // this.checkForMatches();
         },
         error => {
           this.errorMessage = <any>error;
