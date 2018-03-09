@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TournamentPlayer } from '../tournament-player';
 import { MatchService } from '../../matches/match.service';
 import { BadmintonMatch } from '../../matches/badminton-match';
@@ -6,15 +6,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TournamentService } from '../tournament.service';
 import { Tournament } from '../tournament';
+import { UserService } from '../../account/user.service';
 
 @Component({
   selector: 'bme-tournament-detail',
   templateUrl: './tournament-detail.component.html',
   styleUrls: ['./tournament-detail.component.css']
 })
-export class TournamentDetailComponent implements OnInit {
+export class TournamentDetailComponent implements OnInit, OnDestroy {
+  hasAuthority = false;
   showInput = false;
+  stopPolling = false;
   tournament: Tournament;
+  userTournaments: Tournament[];
   tournamentPlayers: TournamentPlayer[];
   badmintonMatches = new Array<BadmintonMatch>();
   errorMessage: HttpErrorResponse;
@@ -29,12 +33,34 @@ export class TournamentDetailComponent implements OnInit {
   round8: number;
   round9: number;
 
-  constructor(private _tournamentService: TournamentService, private _matchService: MatchService,
+  constructor(private _tournamentService: TournamentService, private _matchService: MatchService, private _userService: UserService,
     private _router: Router, private _route: ActivatedRoute) { }
 
   ngOnInit() {
     const id = +this._route.snapshot.paramMap.get('id');
-    this.initialize(id);
+
+    if (this._userService.getUser()) {
+      this.checkAuthority(id);
+    } else {
+      this.initialize(id);
+    }
+    this.pollTournament();
+  }
+
+  ngOnDestroy() {
+    this.stopPolling = true;
+  }
+
+  checkAuthority(id: number) {
+    this._tournamentService.getTournamentsByUser(this._userService.getUser().id)
+      .subscribe(
+        tournaments => {
+          this.userTournaments = tournaments;
+          this.initialize(id);
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
   }
 
   createBracket() {
@@ -162,34 +188,6 @@ export class TournamentDetailComponent implements OnInit {
         });
   }
 
-  checkForMatches() {
-    for (let j = 0; j < this.rounds.length; j++) {
-      const matches = this.getMatchRounds(this.rounds[j]);
-      for (let x = 0; x < matches.length; x++) {
-        const playerNames = new Array<string>();
-        for (let i = 0; i < this.tournament.players.length; i++) {
-          if (this.rounds[j] === this.tournament.players[i].round && matches[x] === Math.ceil(this.tournament.players[i].position / 2)) {
-            playerNames.push(this.tournament.players[i].name);
-          }
-        }
-        if (playerNames.length === 2) {
-          this._matchService.getMatchByPlayerNames(playerNames[0], playerNames[1], this.tournament.id)
-            .subscribe(
-              badmintonMatch => {
-                if (badmintonMatch) {
-                  this.badmintonMatches.push(badmintonMatch);
-                  // if (this.badmintonMatches.length === 1)
-                  this._router.navigate(['/tournaments/' + this.tournament.id]);
-                }
-              },
-              error => {
-                this.errorMessage = <any>error;
-              });
-        }
-      }
-    }
-  }
-
   checkLastRound(matchRound: number): boolean {
     if (matchRound === 0) {
       return true;
@@ -241,12 +239,41 @@ export class TournamentDetailComponent implements OnInit {
     }
   }
 
+  pollTournament() {
+    if (!this.stopPolling) {
+      setTimeout(() => {
+        this._tournamentService.getTournamentById(this.tournament.id)
+          .subscribe(
+            tournament => {
+              this.tournament = tournament;
+              this.pollTournament();
+            },
+            error => {
+              this.errorMessage = <any>error;
+            });
+      }, 3000);
+    }
+  }
+
   updateTournament() {
     this._tournamentService.updateTournament(this.tournament)
       .subscribe(
         tournament => {
           if (tournament) {
             this.initialize(tournament.id);
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+        });
+  }
+
+  deleteTournament() {
+    this._tournamentService.deleteTournament(this.tournament.id)
+      .subscribe(
+        tournament => {
+          if (!tournament) {
+            this._router.navigate(['/tournaments']);
           }
         },
         error => {
@@ -263,9 +290,14 @@ export class TournamentDetailComponent implements OnInit {
       .subscribe(
         tournament => {
           this.tournament = tournament;
+          if (this.userTournaments) {
+            for (let i = 0; i < this.userTournaments.length; i++) {
+              if (this.userTournaments[i].id === tournament.id) {
+                this.hasAuthority = true;
+              }
+            }
+          }
           this.createBracket();
-          // this._router.navigate(['/tournaments/' + this.tournament.id]);
-          // this.checkForMatches();
         },
         error => {
           this.errorMessage = <any>error;

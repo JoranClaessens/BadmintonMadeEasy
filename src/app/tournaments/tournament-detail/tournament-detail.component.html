@@ -4,6 +4,7 @@
 </div>
 <div *ngIf="tournament" class="container-fluid" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>{{tournament.title}}</h1>
+  <p class="text text-primary">{{tournament.street}}, {{tournament.city}}</p>
   <div class="row">
     <div class="col-md-9">
       <main>
@@ -19,7 +20,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="tournament.scheduled && round !== 1 && !getMatch(getPlayer(round - 1, match * 2 - 1, 1), getPlayer(round - 1,  match * 2 - 1, 0))
-                    && getPlayer(round - 1, match * 2 - 1, 1) && getPlayer(round - 1,  match * 2 - 1, 0)">
+                    && getPlayer(round - 1, match * 2 - 1, 1) && getPlayer(round - 1,  match * 2 - 1, 0) && hasAuthority">
                   <button class="btn btn-sm btn-link" (click)="startMatch(getPlayer(round - 1, match * 2 - 1, 1), getPlayer(round - 1,  match * 2 - 1, 0))">Start wedstrijd</button>
                 </ng-container>
 
@@ -50,7 +51,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="tournament.scheduled && round !== 1 && !getMatch(getPlayer(round - 1, match * 2, 1), getPlayer(round - 1,  match * 2, 0))
-                    && getPlayer(round - 1, match * 2, 1) && getPlayer(round - 1,  match * 2, 0)">
+                    && getPlayer(round - 1, match * 2, 1) && getPlayer(round - 1,  match * 2, 0) && hasAuthority">
                   <button class="btn btn-sm btn-link" style="margin-top: -10px;" (click)="startMatch(getPlayer(round - 1, match * 2, 1), getPlayer(round - 1,  match * 2, 0))">Start wedstrijd</button>
                 </ng-container>
 
@@ -74,8 +75,25 @@
               <li class="spacer">&nbsp;</li>
             </ng-container>
             <ng-container *ngIf="!match">
-              <li class="game game-top winner">Lousville
-                <span>85</span>
+              <li class="game game-top winner">
+                <ng-container *ngIf="tournament.scheduled && round !== 1 && getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 0))
+                && !getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 0)).matchFinished">
+                  <a [routerLink]="['/matches/' + getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 0)).id]">Bekijk wedstrijd</a>
+                </ng-container>
+
+                <ng-container *ngIf="tournament.scheduled && round !== 1 && !getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 0))
+                && getPlayer(round - 1, 1, 1) && getPlayer(round - 1,  1, 0)">
+                  <button class="btn btn-sm btn-link" (click)="startMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1, 1, 0))">Start wedstrijd</button>
+                </ng-container>
+
+                <ng-container *ngIf="tournament.scheduled && getPlayer(round, 1, 1)">
+                  {{getPlayer(round, 1, 1)}}
+                </ng-container>
+
+                <span>&nbsp;</span>
+              </li>
+              <li *ngIf="getGamePoints(getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1, 1, 0)))" class="game game-bottom" style="margin-bottom: -20px; border-style: none;">
+                {{getGamePoints(getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1, 1, 0)))}}
               </li>
             </ng-container>
           </ng-container>
@@ -87,7 +105,13 @@
         <div class="card-header text-center" style="font-size: 15px; font-weight: bold;">Acties</div>
         <div class="card-body" *ngIf="true">
           <div class="list-group" style="text-align: center">
-            <div class="list-group-item list-group-item-action list-group-item-primary" *ngIf="!tournament.scheduled">
+            <div class="list-group-item list-group-item-action list-group-item-primary">
+              Wil je andere personen op de hoogte houden van dit toernooi. Stuur dan de volgende sleutel naar deze persoon:
+              <br>
+              <br>
+              <p class="text text-primary" style="font-size: 30px; font-weight: bold; border: solid black 1px;">{{tournament.id}}</p>
+            </div>
+            <div class="list-group-item list-group-item-action list-group-item-primary" *ngIf="!tournament.scheduled && hasAuthority">
               Het toernooi kan pas starten wanneer alle spelers geloot en ingegeven zijn in dit schema.
               <br>
               <br> Er dienen nog
@@ -97,14 +121,16 @@
               <br>
               <button [disabled]="tournament.numberOfTeams !== tournament.players.length" class="btn btn-lg btn-primary" (click)="scheduleTournament()">Schema vastleggen</button>
             </div>
-            <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in
-            </a>
-            <a href="#" class="list-group-item list-group-item-action disabled">Morbi leo risus
-            </a>
+            <div class="list-group-item list-group-item-action list-group-item-danger" *ngIf="hasAuthority">
+              Verwijder dit toernooi
+              <span *ngIf="tournament.matches.length > 0"> en de bijbehorende wedstrijden</span>.
+              <br>
+              <br>
+              <button class="btn btn-lg btn-danger" (click)="deleteTournament()">Verwijder toernooi</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </div>
