@@ -27,7 +27,6 @@ export class MatchListComponent implements OnInit {
       this.loadUserMatches();
     }
     this.loadAllMatches();
-    console.log(this.currentDate.getTime());
   }
 
   onMatchTabChanged() {

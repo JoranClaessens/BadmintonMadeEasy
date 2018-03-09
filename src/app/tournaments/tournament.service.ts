@@ -11,8 +11,20 @@ export class TournamentService {
 
     constructor(private _http: HttpClient) { }
 
+    getTournaments(): Observable<Tournament[]> {
+        return this._http.get<Tournament[]>(this.tournamentUrl)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     getTournamentById(id: number): Observable<Tournament> {
         return this._http.get<Tournament>(this.tournamentUrl + '/' + id)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getTournamentsByUser(userId: number): Observable<Tournament[]> {
+        return this._http.get<Tournament[]>(this.tournamentUrl + '/user/' + userId)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }

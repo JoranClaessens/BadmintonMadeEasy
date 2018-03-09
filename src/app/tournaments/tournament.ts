@@ -7,6 +7,8 @@ export class Tournament {
     title: string;
     numberOfTeams: number;
     type: string;
+    startDate: Date;
+    endDate: Date;
     matches: BadmintonMatch[];
     players: TournamentPlayer[];
     user: User;
@@ -14,10 +16,12 @@ export class Tournament {
     city: string;
     scheduled: boolean;
 
-    constructor(title: string, numberOfTeams: number, type: string, street: string, city: string) {
+    constructor(title: string, numberOfTeams: number, type: string, startDate: Date, endDate: Date, street: string, city: string) {
         this.title = title;
         this.numberOfTeams = numberOfTeams;
         this.type = type;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.street = street;
         this.city = city;
         this.scheduled = false;

@@ -1,20 +1,43 @@
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage}}
+</div>
+<div *ngIf="customWarningMessage" class="alert alert-dismissible alert-warning container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearcustomWarningMessage()">&times;</button>
+  {{customWarningMessage}}
+</div>
 <div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>Toernooien</h1>
+  <div class="btn-group btn-group-toggle">
+    <label class="btn btn-primary" [ngClass]="{'active': selectedTournamentTab === 1}">
+      <input type="radio" name="options" [value]="1" [(ngModel)]="selectedTournamentTab" (change)="onTournamentTabChanged()">Alle toernooien
+    </label>
+    <label class="btn btn-primary" [ngClass]="{'active': selectedMatchTab === 2}">
+      <input type="radio" name="options" [value]="2" [(ngModel)]="selectedTournamentTab" (change)="onTournamentTabChanged()">Jouw toernooien
+      <span class="badge badge-danger badge-pill">{{userTournamentsCount}}</span>
+    </label>
+    <button class="btn btn-warning" (click)="createTournament()">
+      <i class="fas fa-plus"></i> Toernooi aanmaken</button>
+  </div>
   <hr class="my-3">
+  <div *ngIf="!loggedIn && selectedTournamentTab === 2" class="alert alert-warning">
+    U moet eerst aangemeld zijn om jouw toernooien te kunnen zien!
+    <a [routerLink]="['/account/login']" class="alert-link">Aanmelden</a>
+    of
+    <a [routerLink]="['/account/create']" class="alert-link">Registreer nu</a>
+  </div>
+  <div *ngIf="tournaments && tournaments.length < 1" class="alert alert-warning">
+    Geen toernooien gevonden!
+  </div>
   <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start list-group-item-primary">
+    <a *ngFor="let tournament of tournaments" class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]="{'list-group-item-primary': tournament.type === 'MEN_SINGLE' || tournament.type === 'MEN_DOUBLE',
+    'list-group-item-info': tournament.type === 'WOMEN_SINGLE' || tournament.type === 'WOMEN_DOUBLE',
+    'list-group-item-dark': tournament.type === 'MIX'}" [routerLink]="['/tournaments/' + tournament.id]">
       <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">Bierset - SMC1</h5>
-        <small>5u en 20 minuten bezig...</small>
+        <h5 class="mb-1">{{tournament.title}}</h5>
+        <small>{{tournament.street}}, {{tournament.city}}</small>
       </div>
-      <p>24/03/2018 - 25/03/2018</p>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start list-group-item-info">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">Bierset - SDC1</h5>
-        <small>5u en 20 minuten bezig...</small>
-      </div>
-      <p>24/03/2018 - 25/03/2018</p>
+      <p>{{tournament.startDate | date : 'dd/MM/yyyy'}} - {{tournament.endDate | date : 'dd/MM/yyyy'}}</p>
     </a>
   </div>
 </div>

@@ -10,9 +10,12 @@ import { Tournament } from '../tournament';
   styleUrls: ['./tournament-create.component.css']
 })
 export class TournamentCreateComponent implements OnInit {
+  today = new Date();
   tournamentId: number;
   title: string;
   selectedMatchType = 'NONE';
+  startDate: Date;
+  endDate: Date;
   numberOfTeams: number;
   street: string;
   city: string;
@@ -27,7 +30,7 @@ export class TournamentCreateComponent implements OnInit {
 
   createTournament() {
     this._tournamentService.createTournament(new Tournament(this.title, this.numberOfTeams, this.selectedMatchType,
-      this.street, this.city), this._userService.getUser().id)
+      new Date(this.startDate), new Date(this.endDate), this.street, this.city), this._userService.getUser().id)
       .subscribe(
         tournament => {
           if (tournament) {
@@ -49,6 +52,8 @@ export class TournamentCreateComponent implements OnInit {
     this.title = null;
     this.selectedMatchType = 'NONE';
     this.numberOfTeams = null;
+    this.startDate = null;
+    this.endDate = null;
     this.street = null;
     this.city = null;
     this.createLocation = false;

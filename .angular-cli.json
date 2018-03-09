@@ -20,13 +20,15 @@
       "prefix": "bme",
       "styles": [
         "styles.css",
-        "assets/bootstrap/bootstrap-materia-theme.css"
+        "assets/bootstrap/bootstrap-materia-theme.css",
+        "assets/bootstrap/datepicker/css/bootstrap-datepicker3.min.css"
       ],
       "scripts": [
         "assets/jQuery/jquery.min.js",
         "assets/bootstrap/tether.min.js",
         "assets/bootstrap/popper.min.js",
-        "assets/bootstrap/bootstrap.min.js"
+        "assets/bootstrap/bootstrap.min.js",
+        "assets/bootstrap/datepicker/js/bootstrap-datepicker.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
