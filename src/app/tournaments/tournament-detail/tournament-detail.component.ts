@@ -142,20 +142,42 @@ export class TournamentDetailComponent implements OnInit, OnDestroy {
   }
 
   getPlayer(round: number, match: number, position: number): string {
-    for (let i = 0; i < this.tournament.players.length; i++) {
-      if (round === this.tournament.players[i].round && match === Math.ceil(this.tournament.players[i].position / 2) &&
-        position === this.tournament.players[i].position % 2) {
-        return this.tournament.players[i].name;
+    if (this.tournament.type === 'MEN_SINGLE' || this.tournament.type === 'WOMEN SINGLE') {
+      for (let i = 0; i < this.tournament.players.length; i++) {
+        if (round === this.tournament.players[i].round && match === Math.ceil(this.tournament.players[i].position / 2) &&
+          position === this.tournament.players[i].position % 2) {
+          return this.tournament.players[i].name;
+        }
+      }
+    } else {
+      for (let i = 0; i < this.tournament.players.length; i++) {
+        if (round === this.tournament.players[i].round && match === Math.ceil(this.tournament.players[i].position / 4) &&
+          position === this.tournament.players[i].position % 4) {
+          return this.tournament.players[i].name;
+        }
       }
     }
     return null;
   }
 
-  getMatch(player1: string, player2: string): BadmintonMatch {
-    for (let i = 0; i < this.tournament.matches.length; i++) {
-      if (player1 && player2 && this.tournament.matches[i].player1 && this.tournament.matches[i].player2) {
-        if (this.tournament.matches[i].player1 === player1 && this.tournament.matches[i].player2 === player2) {
-          return this.tournament.matches[i];
+  getMatch(player1: string, player2: string, player3: string, player4: string): BadmintonMatch {
+    if (this.tournament.type === 'MEN_SINGLE' || this.tournament.type === 'WOMEN SINGLE') {
+      for (let i = 0; i < this.tournament.matches.length; i++) {
+        if (player1 && player2 && this.tournament.matches[i].player1 && this.tournament.matches[i].player2) {
+          if (this.tournament.matches[i].player1 === player1 && this.tournament.matches[i].player2 === player2) {
+            return this.tournament.matches[i];
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < this.tournament.matches.length; i++) {
+        if (player1 && player2 && player3 && player4
+          && this.tournament.matches[i].player1 && this.tournament.matches[i].player2
+          && this.tournament.matches[i].player3 && this.tournament.matches[i].player4) {
+          if (this.tournament.matches[i].player1 === player1 && this.tournament.matches[i].player2 === player2
+            && this.tournament.matches[i].player3 === player3 && this.tournament.matches[i].player4 === player4) {
+            return this.tournament.matches[i];
+          }
         }
       }
     }
@@ -174,9 +196,9 @@ export class TournamentDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  startMatch(player1: string, player2: string) {
+  startMatch(player1: string, player2: string, player3: string, player4: string) {
     this._tournamentService.createMatch(new BadmintonMatch(this.tournament.title, this.tournament.type,
-      player1, player2, null, null, this.tournament.street, this.tournament.city, null), 1, this.tournament.id)
+      player1, player2, player3, player4, this.tournament.street, this.tournament.city, null), 1, this.tournament.id)
       .subscribe(
         badmintonMatch => {
           if (badmintonMatch) {
@@ -302,5 +324,26 @@ export class TournamentDetailComponent implements OnInit, OnDestroy {
         error => {
           this.errorMessage = <any>error;
         });
+  }
+
+  getMarginTop(round: number, match: number, player: string) {
+    let marginTop = '0px';
+    if ((!this.tournament.scheduled && round === 1) || (this.tournament.scheduled && player)) {
+      marginTop = '-38px';
+    } else if ((this.getMatch(this.getPlayer(round - 1, match * 2, 1), this.getPlayer(round - 1, match * 2, 3),
+        this.getPlayer(round - 1, match * 2, 2), this.getPlayer(round - 1, match * 2, 0))
+      && !this.getMatch(this.getPlayer(round - 1, match * 2, 1), this.getPlayer(round - 1, match * 2, 3),
+        this.getPlayer(round - 1, match * 2, 2), this.getPlayer(round - 1, match * 2, 0)).matchFinished)
+      || (!this.getMatch(this.getPlayer(round - 1, match * 2, 1), this.getPlayer(round - 1, match * 2, 3),
+        this.getPlayer(round - 1, match * 2, 2), this.getPlayer(round - 1, match * 2, 0))
+        && this.getPlayer(round - 1, match * 2, 1) && this.getPlayer(round - 1, match * 2, 2)
+        && this.getPlayer(round - 1, match * 2, 3) && this.getPlayer(round - 1, match * 2, 0)
+        && this.hasAuthority)) {
+      marginTop = '-20px';
+    }
+    const styles = {
+      'margin-top': marginTop
+    };
+    return styles;
   }
 }
