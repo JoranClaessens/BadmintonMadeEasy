@@ -1,56 +1,60 @@
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage}}
+</div>
+<div *ngIf="customWarningMessage" class="alert alert-dismissible alert-warning container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearcustomWarningMessage()">&times;</button>
+  {{customWarningMessage}}
+</div>
 <div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
   <h1>Competitiepartijen</h1>
+  <div class="btn-group btn-group-toggle">
+    <label class="btn btn-primary" [ngClass]="{'active': selectedTournamentTab === 1}">
+      <input type="radio" name="options" [value]="1" [(ngModel)]="selectedCompetitionTab" (change)="onCompetitionTabChanged()">Alle competitiepartijen
+    </label>
+    <label class="btn btn-primary" [ngClass]="{'active': selectedMatchTab === 2}">
+      <input type="radio" name="options" [value]="2" [(ngModel)]="selectedCompetitionTab" (change)="onCompetitionTabChanged()">Jouw competitiepartijen
+      <span class="badge badge-danger badge-pill">{{userCompetitionsCount}}</span>
+    </label>
+    <button class="btn btn-warning" (click)="createCompetition()">
+      <i class="fas fa-plus"></i> Competitiepartij aanmaken</button>
+  </div>
   <hr class="my-3">
-  <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start list-group-item-primary">
+  <div *ngIf="!loggedIn && selectedCompetitionTab === 2" class="alert alert-warning">
+    U moet eerst aangemeld zijn om jouw competitiepartijen te kunnen zien!
+    <a [routerLink]="['/account/login']" class="alert-link">Aanmelden</a>
+    of
+    <a [routerLink]="['/account/create']" class="alert-link">Registreer nu</a>
+  </div>
+  <div *ngIf="competitions && competitions.length < 1" class="alert alert-warning">
+    Geen competitiepartijen gevonden!
+  </div>
+  <div class="list-group" *ngIf="competitions">
+    <a *ngFor="let competition of competitions" class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]="{'list-group-item-primary': competition.type === 'MEN',
+    'list-group-item-info': competition.type === 'WOMEN',
+    'list-group-item-dark': competition.type === 'MIX'}" [routerLink]="['/competitions/' + competition.id]">
       <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">Heren competitie - 2de provinciale a</h5>
-        <small>10 minuten bezig...</small>
+        <h5 class="mb-1">{{competition.title}}</h5>
+        <small>{{competition.startDate | date: 'dd/MM/yyyy'}}</small>
       </div>
       <div class="row">
         <div class="col-md-5" style="font-weight: bold; text-align: right; font-size: 30px;">
-          't Pluimke
+          {{competition.team1}}
         </div>
         <div class="col-md-2" style="font-weight: bold; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center;">
           VS
         </div>
         <div class="col-md-5" style="font-weight: bold; text-align: left; font-size: 30px;">
-          Hebad
+          {{competition.team2}}
         </div>
       </div>
       <div class="row">
         <div class="col-md-6" style="font-weight: bold; text-align: right; font-size: 20px;">
-          1
+          {{competition.matchesWonTeam1}}
         </div>
         <p style="display: flex; align-items: center; justify-content: center; font-size: 20px;">-</p>
         <div class="col-md-5" style="text-align: left; font-size: 20px;">
-          0
-        </div>
-      </div>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start list-group-item-info">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">Vrouwen competitie - 1ste provinciale a</h5>
-        <small>32 minuten bezig...</small>
-      </div>
-      <div class="row">
-        <div class="col-md-5" style="font-weight: bold; text-align: right; font-size: 30px;">
-          't Pluimke
-        </div>
-        <div class="col-md-2" style="font-weight: bold; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center;">
-          VS
-        </div>
-        <div class="col-md-5" style="font-weight: bold; text-align: left; font-size: 30px;">
-          Hebad
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6" style="font-weight: bold; text-align: right; font-size: 20px;">
-          2
-        </div>
-        <p style="display: flex; align-items: center; justify-content: center; font-size: 20px;">-</p>
-        <div class="col-md-5" style="font-weight: bold; text-align: left; font-size: 20px;">
-          2
+          {{competition.matchesWonTeam2}}
         </div>
       </div>
     </a>

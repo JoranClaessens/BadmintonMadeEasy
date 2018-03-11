@@ -15,6 +15,18 @@ export class CompetitionService {
             .catch(this.handleError);
     }
 
+    getCompetitionById(id: number): Observable<Competition> {
+        return this._http.get<Competition>(this.competitionUrl + '/' + id)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getCompetitionsByUser(userId: number): Observable<Competition[]> {
+        return this._http.get<Competition[]>(this.competitionUrl + '/user/' + userId)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     createCompetition(competition: Competition, userId: number): Observable<Competition> {
         return this._http.post<Competition>(this.competitionUrl + '/create/' + userId, competition)
             .do(data => console.log('All: ' + JSON.stringify(data)))
