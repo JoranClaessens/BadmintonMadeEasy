@@ -1,0 +1,64 @@
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage}}
+</div>
+<div *ngIf="competitionCreated" class="alert alert-dismissible alert-success container">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Toernooi succesvol aangemaakt!
+  <a [routerLink]="['/competitions/' + competitionId]" class="alert-link">Ga naar competitiepartij</a>
+</div>
+<div class="container" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
+  <h1>Competitiepartij aanmaken</h1>
+  <hr class="my-3">
+  <form>
+    <fieldset>
+      <div class="form-group">
+        <label for="title">Titel</label>
+        <input type="text" class="form-control" name="title" placeholder="Competitie titel" [(ngModel)]="title">
+      </div>
+      <div class="form-group">
+        <label for="competitionTypes">Type competitie</label>
+        <select class="form-control" id="competitionTypes" [(ngModel)]="selectedCompetitionType" name="competitionTypes">
+          <option value="NONE" selected>Kies een type...</option>
+          <option value="MEN">Heren competitie</option>
+          <option value="WOMEN">Vrouwen competitie</option>
+          <option value="MIX">Gemengde competitie</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="selectedCompetitionType !== 'NONE'">
+        <label>Teams</label>
+        <div class="row">
+          <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Team 1" name="team1" [(ngModel)]="team1">
+          </div>
+          <div class="col-md-2" style="display: flex; align-items: center; justify-content: center;">
+            VS
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Team 2" name="team2" [(ngModel)]="team2">
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="selectedCompetitionType !== 'NONE'">
+        <label>Startdatum</label>
+        <input type="date" class="form-control" name="startDate" style="width: 200px;" placeholder="dd/mm/jjjj" [(ngModel)]="startDate">
+      </div>
+      <div style="margin-bottom: 10px;">
+        <button class="btn btn-sm btn-info" (click)="createLocation = !createLocation">
+          <i class="fas fa-plus"></i> Locatie toevoegen</button>
+        <span> *Optioneel</span>
+      </div>
+      <div *ngIf="createLocation">
+        <div class="form-group">
+          <label for="street">Straat + Huisnummer</label>
+          <input type="text" class="form-control" name="street" placeholder="Straat + Huisnummer" [(ngModel)]="street">
+        </div>
+        <div class="form-group">
+          <label>Plaats</label>
+          <input type="text" class="form-control" name="city" placeholder="Postcode + Gemeente" [(ngModel)]="city">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" (click)="createCompetition()">Opslaan</button>
+    </fieldset>
+  </form>
+</div>
