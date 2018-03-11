@@ -220,11 +220,20 @@ export class TournamentDetailComponent implements OnInit, OnDestroy {
   scheduleTournament() {
     this.tournament.scheduled = true;
     for (let i = 1; i <= this.getMatchRounds(1).length; i++) {
-      if (!this.getPlayer(1, i, 1) && this.getPlayer(1, i, 0)) {
-        console.log(Math.ceil(i / 2));
-        this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 0), 2, i));
-      } else if (this.getPlayer(1, i, 1) && !this.getPlayer(1, i, 0)) {
-        this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 1), 2, i));
+      if (this.tournament.type === 'MEN_SINGLE' || this.tournament.type === 'WOMEN SINGLE') {
+        if (!this.getPlayer(1, i, 1) && this.getPlayer(1, i, 0)) {
+          this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 0), 2, i));
+        } else if (this.getPlayer(1, i, 1) && !this.getPlayer(1, i, 0)) {
+          this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 1), 2, i));
+        }
+      } else {
+        if (this.getPlayer(1, i, 1) && this.getPlayer(1, i, 2) && !this.getPlayer(1, i, 3) && !this.getPlayer(1, i, 0)) {
+          this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 1), 2, i));
+          this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 2), 2, i + 1));
+        } else if (!this.getPlayer(1, i, 1) && !this.getPlayer(1, i, 2) && this.getPlayer(1, i, 3) && this.getPlayer(1, i, 0)) {
+          this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 3), 2, i));
+          this.tournament.players.push(new TournamentPlayer(this.getPlayer(1, i, 0), 2, i + 1));
+        }
       }
     }
     this.updateTournament();
@@ -331,14 +340,14 @@ export class TournamentDetailComponent implements OnInit, OnDestroy {
     if ((!this.tournament.scheduled && round === 1) || (this.tournament.scheduled && player)) {
       marginTop = '-38px';
     } else if ((this.getMatch(this.getPlayer(round - 1, match * 2, 1), this.getPlayer(round - 1, match * 2, 3),
-        this.getPlayer(round - 1, match * 2, 2), this.getPlayer(round - 1, match * 2, 0))
+      this.getPlayer(round - 1, match * 2, 2), this.getPlayer(round - 1, match * 2, 0))
       && !this.getMatch(this.getPlayer(round - 1, match * 2, 1), this.getPlayer(round - 1, match * 2, 3),
         this.getPlayer(round - 1, match * 2, 2), this.getPlayer(round - 1, match * 2, 0)).matchFinished)
       || (!this.getMatch(this.getPlayer(round - 1, match * 2, 1), this.getPlayer(round - 1, match * 2, 3),
         this.getPlayer(round - 1, match * 2, 2), this.getPlayer(round - 1, match * 2, 0))
         && this.getPlayer(round - 1, match * 2, 1) && this.getPlayer(round - 1, match * 2, 2)
         && this.getPlayer(round - 1, match * 2, 3) && this.getPlayer(round - 1, match * 2, 0)
-        && this.hasAuthority)) {
+        && this.hasAuthority) && this.tournament.scheduled) {
       marginTop = '-20px';
     }
     const styles = {
