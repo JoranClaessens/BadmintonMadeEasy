@@ -160,7 +160,7 @@
             </ng-container>
 
 
-            <ng-container *ngIf="!match">
+            <ng-container *ngIf="!match && (tournament.type === 'MEN_SINGLE' || tournament.type === 'WOMEN_SINGLE')">
               <li class="game game-top winner">
                 <ng-container *ngIf="tournament.scheduled && round !== 1 && getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 0))
                 && !getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 0)).matchFinished">
@@ -180,6 +180,33 @@
               </li>
               <li *ngIf="getGamePoints(getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1, 1, 0)))" class="game game-bottom" style="margin-bottom: -20px; border-style: none;">
                 {{getGamePoints(getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1, 1, 0)))}}
+              </li>
+            </ng-container>
+
+            <ng-container *ngIf="!match && tournament.type !== 'MEN_SINGLE' && tournament.type !== 'WOMEN_SINGLE'">
+              <li class="game game-top winner">
+                <ng-container *ngIf="tournament.scheduled && round !== 1 && getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 3), getPlayer(round - 1, 1, 2), getPlayer(round - 1,  1, 0))
+                && !getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 3), getPlayer(round - 1, 1, 2), getPlayer(round - 1,  1, 0)).matchFinished">
+                  <a [routerLink]="['/matches/' + getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 0)).id]">Bekijk wedstrijd</a>
+                </ng-container>
+
+                <ng-container *ngIf="tournament.scheduled && round !== 1 && !getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 3), getPlayer(round - 1, 1, 2), getPlayer(round - 1,  1, 0))
+                && getPlayer(round - 1, 1, 1) && getPlayer(round - 1,  1, 0) && getPlayer(round - 1, 1, 2) && getPlayer(round - 1, 1, 3)">
+                  <button class="btn btn-sm btn-link" (click)="startMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 3), getPlayer(round - 1, 1, 2), getPlayer(round - 1,  1, 0))">Start wedstrijd</button>
+                </ng-container>
+
+                <ng-container *ngIf="tournament.scheduled && getPlayer(round, 1, 1)">
+                  {{getPlayer(round, 1, 1)}}
+                  <br>
+                </ng-container>
+                <ng-container *ngIf="tournament.scheduled && getPlayer(round, 1, 2)">
+                  {{getPlayer(round, 1, 2)}}
+                </ng-container>
+
+                <span>&nbsp;</span>
+              </li>
+              <li *ngIf="getGamePoints(getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 3), getPlayer(round - 1, 1, 2), getPlayer(round - 1,  1, 0)))" class="game game-bottom" style="margin-bottom: -20px; border-style: none;">
+                {{getGamePoints(getMatch(getPlayer(round - 1, 1, 1), getPlayer(round - 1,  1, 3), getPlayer(round - 1, 1, 2), getPlayer(round - 1,  1, 0)))}}
               </li>
             </ng-container>
           </ng-container>
