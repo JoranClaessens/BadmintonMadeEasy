@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Competition } from './competition';
+import { CompetitionPlayer } from './competition-player';
+import { BadmintonMatch } from '../matches/badminton-match';
 
 @Injectable()
 export class CompetitionService {
@@ -29,6 +31,24 @@ export class CompetitionService {
 
     createCompetition(competition: Competition, userId: number): Observable<Competition> {
         return this._http.post<Competition>(this.competitionUrl + '/create/' + userId, competition)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    createMatch(badmintonMatch: BadmintonMatch, userId: number, competitionId: number): Observable<BadmintonMatch> {
+        return this._http.post<BadmintonMatch>(this.competitionUrl + '/matches/' + userId + '/' + competitionId, badmintonMatch)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    updateCompetition(competition: Competition): Observable<Competition> {
+        return this._http.put<Competition>(this.competitionUrl, competition)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    deleteCompetitionPlayer(competitionPlayer: CompetitionPlayer): Observable<CompetitionPlayer> {
+        return this._http.delete<CompetitionPlayer>(this.competitionUrl + '/players/' + competitionPlayer.id)
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }

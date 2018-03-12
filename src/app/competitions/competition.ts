@@ -1,5 +1,6 @@
 import { User } from '../account/user';
 import { BadmintonMatch } from '../matches/badminton-match';
+import { CompetitionPlayer } from './competition-player';
 
 export class Competition {
     id: number;
@@ -9,6 +10,7 @@ export class Competition {
     team2: string;
     startDate: Date;
     matches: BadmintonMatch[];
+    players: CompetitionPlayer[];
     user: User;
     street: string;
     city: string;

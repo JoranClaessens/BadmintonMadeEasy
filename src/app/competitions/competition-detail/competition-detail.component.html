@@ -1,3 +1,388 @@
-<p>
-  competition-detail works!
-</p>
+<div *ngIf="errorMessage" class="alert alert-dismissible alert-danger container-fluid">
+  <button type="button" class="close" data-dismiss="alert" (click)="clearErrorMessage()">&times;</button>
+  {{errorMessage}}
+</div>
+<div *ngIf="competition" class="container-fluid" style="background-color: white; border-width: 2px; border-radius: 5px; border-color: cornflowerblue; border-style: solid; padding-top: 10px; padding-bottom: 15px; margin-bottom: 20px;">
+  <h1>{{competition.title}}</h1>
+  <p *ngIf="competition.street && competition.city" class="text text-primary">{{competition.street}}, {{competition.city}}</p>
+  <table *ngIf="competition.type === 'MEN'" class="table table-bordered" style="margin-top: 20px; font-size: 20px;">
+    <thead>
+      <tr class="table-primary">
+        <th scope="col">Onderdeel</th>
+        <th scope="col" style="text-align: right; width: 400px;">{{competition.team1}}</th>
+        <th scope="col" style="width: 400px;">{{competition.team2}}</th>
+        <th scope="col" style="text-align: center; width: 150px;">Set 1</th>
+        <th scope="col" style="text-align: center; width: 150px;">Set 2</th>
+        <th scope="col" style="text-align: center; width: 150px;">Set 3</th>
+        <th scope="col" style="text-align: center">Acties</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row" style="width: 50px; text-align: center; vertical-align: middle">HD1</th>
+
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 1, 1)" [value]="getPlayer(competition.team1, 1, 1)?.name"
+            placeholder="Naam speler" name="match1team1position1" style="width: 100%; text-align: right; padding-right: 15px;">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 1, 2)" [value]="getPlayer(competition.team1, 1, 2)?.name"
+            placeholder="Naam speler" name="match1team1position2" style="width: 100%; text-align: right; padding-right: 15px; margin-top: 10px;">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 1, 1)" [value]="getPlayer(competition.team2, 1, 1)?.name"
+            placeholder="Naam speler" name="match1team2position1" style="width: 100%; padding-left: 15px;">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 1, 2)" [value]="getPlayer(competition.team2, 1, 2)?.name"
+            placeholder="Naam speler" name="match1team2position2" style="width: 100%; padding-left: 15px; margin-top: 10px;">
+        </td>
+
+        <ng-container *ngIf="getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), 
+        getPlayer(competition.team2, 1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE')">
+          <td style="text-align: center; vertical-align: middle">
+            <ng-container *ngIf="getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2,
+            1, 2), 'DOUBLE').games[0]">
+              {{getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2,
+              1, 2), 'DOUBLE').games[0].pointsTeam1 + '-' + getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1,
+              1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE').games[0].pointsTeam2}}
+            </ng-container>
+          </td>
+          <td style="text-align: center; vertical-align: middle">
+            <ng-container *ngIf="getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2,
+              1, 2), 'DOUBLE').games[1]">
+              {{getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2,
+              1, 2), 'DOUBLE').games[1].pointsTeam1 + '-' + getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1,
+              1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE').games[1].pointsTeam2}}
+            </ng-container>
+          </td>
+          <td style="text-align: center; vertical-align: middle">
+            <ng-container *ngIf="getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2,
+                1, 2), 'DOUBLE').games[2]">
+              {{getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2,
+              1, 2), 'DOUBLE').games[2].pointsTeam1 + '-' + getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1,
+              1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE').games[2].pointsTeam2}}
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <td style="text-align: center; vertical-align: middle">
+          <button *ngIf="!getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2,
+          1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE') && getPlayer(competition.team1, 1, 1) && getPlayer(competition.team1,
+          1, 2) && getPlayer(competition.team2, 1, 1) && getPlayer(competition.team2, 1, 2) " class="btn btn-primary
+          " (click)="startMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2,
+          1, 1), getPlayer(competition.team2, 1, 2), 'MEN_DOUBLE') ">
+            Start Wedstrijd
+          </button>
+          <button *ngIf="getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2,
+          1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE') && !getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1,
+          1, 2), getPlayer(competition.team2, 1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE').matchFinished " class="btn
+          btn-primary " (click)="viewMatch(getMatch(getPlayer(competition.team1, 1, 1), getPlayer(competition.team1, 1, 2), getPlayer(competition.team2,
+          1, 1), getPlayer(competition.team2, 1, 2), 'DOUBLE')) ">
+            Bekijk Wedstrijd
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row ">HD2</th>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 2, 1) " [value]="getPlayer(competition.team1,
+          2, 1)?.name " placeholder="Naam speler " name="match2team1position1 " style="width: 100%; text-align: right; padding-right:
+          15px; ">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 2, 2) " [value]="getPlayer(competition.team1,
+          2, 2)?.name " placeholder="Naam speler " name="match2team1position2 " style="width: 100%; text-align: right; padding-right:
+          15px; margin-top: 10px; ">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 2, 1) " [value]="getPlayer(competition.team2,
+          2, 1)?.name " placeholder="Naam speler " name="match2team2position1 " style="width: 100%; padding-left: 15px; ">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 2, 2) " [value]="getPlayer(competition.team2,
+          2, 2)?.name " placeholder="Naam speler " name="match2team2position2 " style="width: 100%; padding-left: 15px; margin-top:
+          10px; ">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row ">HD3</th>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 3, 1) " [value]="getPlayer(competition.team1,
+          3, 1)?.name " placeholder="Naam speler " name="match3team1position1 " style="width: 100%; text-align: right; padding-right:
+          15px; ">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 3, 2) " [value]="getPlayer(competition.team1,
+          3, 2)?.name " placeholder="Naam speler " name="match3team1position2 " style="width: 100%; text-align: right; padding-right:
+          15px; margin-top: 10px; ">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 3, 1) " [value]="getPlayer(competition.team2,
+          3, 1)?.name " placeholder="Naam speler " name="match3team2position1 " style="width: 100%; padding-left: 15px; ">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 3, 1) " [value]="getPlayer(competition.team2,
+          3, 2)?.name " placeholder="Naam speler " name="match3team2position2 " style="width: 100%; padding-left: 15px; margin-top:
+          10px; ">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row ">HD4</th>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 4, 1) " [value]="getPlayer(competition.team1,
+          4, 1)?.name " placeholder="Naam speler " name="match4team1position1 " style="width: 100%; text-align: right; padding-right:
+          15px; ">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 4, 2) " [value]="getPlayer(competition.team1,
+          4, 2)?.name " placeholder="Naam speler " name="match4team1position2 " style="width: 100%; text-align: right; padding-right:
+          15px; margin-top: 10px; ">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 4, 1) " [value]="getPlayer(competition.team2,
+          4, 1)?.name " placeholder="Naam speler " name="match4team2position1 " style="width: 100%; padding-left: 15px; ">
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 4, 2) " [value]="getPlayer(competition.team2,
+          4, 2)?.name " placeholder="Naam speler " name="match4team2position2 " style="width: 100%; padding-left: 15px; margin-top:
+          10px; ">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row ">HE1</th>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 5, 1) " [value]="getPlayer(competition.team1,
+          5, 1)?.name " placeholder="Naam speler " name="match5team1position1 " style="width: 100%; text-align: right; padding-right:
+          15px; ">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 5, 1) " [value]="getPlayer(competition.team2,
+          5, 1)?.name " placeholder="Naam speler " name="match5team2position1 " style="width: 100%; padding-left: 15px; ">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row ">HE2</th>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 6, 1) " [value]="getPlayer(competition.team1,
+          6, 1)?.name " placeholder="Naam speler " name="match6team1position1 " style="width: 100%; text-align: right; padding-right:
+          15px; ">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 6, 1) " [value]="getPlayer(competition.team2,
+          6, 1)?.name " placeholder="Naam speler " name="match6team2position1 " style="width: 100%; padding-left: 15px; ">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row ">HE3</th>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 7, 1) " [value]="getPlayer(competition.team1,
+          7, 1)?.name " placeholder="Naam speler " name="match7team1position1 " style="width: 100%; text-align: right; padding-right:
+          15px; ">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 7, 1) " [value]="getPlayer(competition.team2,
+          7, 1)?.name " placeholder="Naam speler " name="match7team2position1 " style="width: 100%; padding-left: 15px; ">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row ">HE4</th>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team1, 8, 1) " [value]="getPlayer(competition.team1,
+          8, 1)?.name " placeholder="Naam speler " name="match8team1position1 " style="width: 100%; text-align: right; padding-right:
+          15px; ">
+        </td>
+        <td>
+          <input (change)="updateCompetitionPlayer($event.target.value, competition.team2, 8, 1) " [value]="getPlayer(competition.team2,
+          8, 1)?.name " placeholder="Naam speler " name="match8team2position1 " style="width: 100%; padding-left: 15px; ">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <table *ngIf="competition.type==='WOMEN' " class="table table-bordered " style="margin-top: 20px; ">
+    <thead>
+      <tr class="table-primary ">
+        <th scope="col ">Onderdeel</th>
+        <th scope="col " style="text-align: right ">{{competition.team1}}</th>
+        <th scope="col ">{{competition.team2}}</th>
+        <th scope="col ">Set 1</th>
+        <th scope="col ">Set 2</th>
+        <th scope="col ">Set 3</th>
+        <th scope="col ">Acties</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row " style="width: 50px; ">DD1</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DD2</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DD3</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DD4</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DE1</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DE2</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DE3</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DE4</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+    </tbody>
+  </table>
+  <table *ngIf="competition.type==='MIX' " class="table table-bordered " style="margin-top: 20px; ">
+    <thead>
+      <tr class="table-primary ">
+        <th scope="col ">Onderdeel</th>
+        <th scope="col " style="text-align: right ">{{competition.team1}}</th>
+        <th scope="col ">{{competition.team2}}</th>
+        <th scope="col ">Set 1</th>
+        <th scope="col ">Set 2</th>
+        <th scope="col ">Set 3</th>
+        <th scope="col ">Acties</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row " style="width: 50px; ">HD</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DD</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">HE1</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">HE2</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DE1</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">DE2</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">GD1</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+      <tr>
+        <th scope="row ">GD2</th>
+        <td style="text-align: right ">Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

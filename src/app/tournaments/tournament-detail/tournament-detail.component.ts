@@ -198,7 +198,8 @@ export class TournamentDetailComponent implements OnInit, OnDestroy {
 
   startMatch(player1: string, player2: string, player3: string, player4: string) {
     this._tournamentService.createMatch(new BadmintonMatch(this.tournament.title, this.tournament.type,
-      player1, player2, player3, player4, this.tournament.street, this.tournament.city, null), 1, this.tournament.id)
+      player1, player2, player3, player4, this.tournament.street, this.tournament.city, null),
+      this._userService.getUser().id, this.tournament.id)
       .subscribe(
         badmintonMatch => {
           if (badmintonMatch) {
