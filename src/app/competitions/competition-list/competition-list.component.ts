@@ -74,7 +74,7 @@ export class CompetitionListComponent implements OnInit {
         if (this.competitions[i].matches[j].matchFinished) {
           let gamesWonTeam1 = 0;
           let gamesWonTeam2 = 0;
-          for (let x = 0; this.competitions[i].matches[j].games.length; x++) {
+          for (let x = 0; x < this.competitions[i].matches[j].games.length; x++) {
             if (this.competitions[i].matches[j].games[x].pointsTeam1 > this.competitions[i].matches[j].games[x].pointsTeam2) {
               gamesWonTeam1++;
             } else {

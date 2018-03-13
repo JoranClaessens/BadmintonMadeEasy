@@ -47,6 +47,12 @@ export class CompetitionService {
             .catch(this.handleError);
     }
 
+    deleteCompetition(competitionId: number): Observable<Competition> {
+        return this._http.delete<Competition>(this.competitionUrl + '/' + competitionId)
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     deleteCompetitionPlayer(competitionPlayer: CompetitionPlayer): Observable<CompetitionPlayer> {
         return this._http.delete<CompetitionPlayer>(this.competitionUrl + '/players/' + competitionPlayer.id)
             .do(data => console.log('All: ' + JSON.stringify(data)))
