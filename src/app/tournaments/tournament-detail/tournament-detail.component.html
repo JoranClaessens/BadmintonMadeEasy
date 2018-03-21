@@ -25,7 +25,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="!tournament.scheduled && round === 1">
-                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 1, match * 2 - 1)" type="text" style="height: 18px; width: 140px; font-size: 13px;"
+                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 1, match * 2 - 1)" type="text" style="height: 18px; width: 120px; font-size: 13px;"
                     placeholder="Speler {{match * 2 - 1}}" value="{{getPlayer(round, match, 1)}}" />
                 </ng-container>
 
@@ -56,7 +56,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="!tournament.scheduled && round === 1">
-                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 0, match * 2)" type="text" style="height: 18px; width: 140px; font-size: 13px;"
+                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 0, match * 2)" type="text" style="height: 18px; width: 120px; font-size: 13px;"
                     placeholder="Speler {{match * 2}}" value="{{getPlayer(round, match, 0)}}" />
                 </ng-container>
 
@@ -91,9 +91,9 @@
                 </ng-container>
 
                 <ng-container *ngIf="!tournament.scheduled && round === 1">
-                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 1, match * 4 - 3)" type="text" style="height: 18px; width: 140px; font-size: 13px;"
+                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 1, match * 4 - 3)" type="text" style="height: 18px; width: 120px; font-size: 13px;"
                     placeholder="Speler {{match * 4 - 3}}" value="{{getPlayer(round, match, 1)}}" />
-                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 2, match * 4 - 2)" type="text" style="height: 18px; width: 140px; font-size: 13px;"
+                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 2, match * 4 - 2)" type="text" style="height: 18px; width: 120px; font-size: 13px;"
                     placeholder="Speler {{match * 4 - 2}}" value="{{getPlayer(round, match, 2)}}" />
                 </ng-container>
 
@@ -132,9 +132,9 @@
                 </ng-container>
 
                 <ng-container *ngIf="!tournament.scheduled && round === 1">
-                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 3, match * 4 - 1)" type="text" style="height: 18px; width: 140px; font-size: 13px;"
+                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 3, match * 4 - 1)" type="text" style="height: 18px; width: 120px; font-size: 13px;"
                     placeholder="Speler {{match * 4 - 1}}" value="{{getPlayer(round, match, 3)}}" />
-                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 0, match * 4)" type="text" style="height: 18px; width: 140px; font-size: 13px;"
+                  <input (change)="updateTournamentPlayer($event.target.value, round, match, 0, match * 4)" type="text" style="height: 18px; width: 120px; font-size: 13px;"
                     placeholder="Speler {{match * 4}}" value="{{getPlayer(round, match, 0)}}" />
                 </ng-container>
                 
