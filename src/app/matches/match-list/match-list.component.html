@@ -10,15 +10,42 @@
   <h1>Wedstrijden</h1>
   <div class="btn-group btn-group-toggle">
     <label class="btn btn-primary" [ngClass]="{'active': selectedMatchTab === 1}">
-      <input type="radio" name="options" [value]="1" [(ngModel)]="selectedMatchTab" (change)="onMatchTabChanged()">Alle wedstrijden
+      <input type="radio" name="options" [value]="1" [(ngModel)]="selectedMatchTab" (click)="onMatchTabChanged()" (change)="onMatchTabChanged()">Alle wedstrijden
     </label>
     <label class="btn btn-primary" [ngClass]="{'active': selectedMatchTab === 2}">
-      <input type="radio" name="options" [value]="2" [(ngModel)]="selectedMatchTab" (change)="onMatchTabChanged()">Jouw wedstrijden
+      <input type="radio" name="options" [value]="2" [(ngModel)]="selectedMatchTab" (click)="onMatchTabChanged()" (change)="onMatchTabChanged()">Jouw wedstrijden
       <span class="badge badge-danger badge-pill">{{userMatchesCount}}</span>
     </label>
-    <button class="btn btn-warning" (click)="createMatch()"><i class="fas fa-plus"></i>  Wedstrijd aanmaken</button>
+    <button class="btn btn-warning" (click)="createMatch()">
+      <i class="fas fa-plus"></i> Wedstrijd aanmaken</button>
+    <button class="btn btn-link" (click)="showFilter = !showFilter">Filters</button>
   </div>
   <hr class="my-3">
+
+  <div *ngIf="showFilter">
+    <form class="form-inline" style="margin-bottom: 10px;">
+      <input class="form-control" type="text" style="width: 600px; margin-right: 20px;" name="query" placeholder="Zoek op sleutel, naam speler of titel wedstrijd..."
+        [(ngModel)]="filterQuery">
+      <button class="btn btn-secondary" type="submit" style="float: right;" (click)="filter()">Zoek</button>
+    </form>
+    <div class="form-group">
+      <label>Filter op:</label>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="key" [(ngModel)]="keyBox" checked>
+        <label class="custom-control-label" style="margin-left: -20px; vertical-align: middle" for="key">Sleutel</label>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="name" [(ngModel)]="nameBox" checked>
+        <label class="custom-control-label" style="margin-left: -20px; vertical-align: middle" for="name">Naam speler</label>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="title" [(ngModel)]="titleBox" checked>
+        <label class="custom-control-label" style="margin-left: -20px; vertical-align: middle" for="title">Titel wedstrijd</label>
+      </div>
+    </div>
+    <hr class="my-3">
+  </div>
+
   <div *ngIf="!loggedIn && selectedMatchTab === 2" class="alert alert-warning">
     U moet eerst aangemeld zijn om jouw wedstrijden te kunnen zien!
     <a [routerLink]="['/account/login']" class="alert-link">Aanmelden</a>
@@ -28,6 +55,9 @@
   <div *ngIf="matches && matches.length < 1" class="alert alert-warning">
     Geen wedstrijden gevonden!
   </div>
+  <div *ngIf="matches && matches.length > 0" class="alert alert-dismissible alert-primary">
+    <strong>{{matches.length}}</strong> wedstrijd(en) gevonden!
+  </div>
   <div class="list-group">
     <a *ngFor="let match of matches" class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]="{'list-group-item-primary': match.type === 'MEN_SINGLE' || match.type === 'MEN_DOUBLE',
                   'list-group-item-info': match.type === 'WOMEN_SINGLE' || match.type === 'WOMEN_DOUBLE',
@@ -36,6 +66,7 @@
         <h5 class="mb-1">{{match.title}}</h5>
         <small *ngIf="match.matchCreated && !match.matchFinished && match.duration > 1">{{match.duration}} minuten bezig...</small>
         <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === '0'">&lt; 1 minuut bezig...</small>
+        <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === '-1'">&gt; 60 minuten bezig...</small>
         <small *ngIf="match.matchCreated && !match.matchFinished && match.duration === 1">1 minuut bezig...</small>
         <small *ngIf="!match.matchCreated">Moet nog starten...</small>
         <small *ngIf="match.matchFinished">Wedstrijd afgelopen op {{match.matchFinished | date:'dd/MM/yyyy HH:mm:ss'}}</small>
@@ -53,13 +84,15 @@
       </div>
       <div *ngIf="match.type !== 'MEN_SINGLE' && match.type !== 'WOMEN_SINGLE'" class="row">
         <div class="col-md-5" style="font-weight: bold; text-align: right; font-size: 30px;">
-          {{match.player1}}<br>{{match.player3}}
+          {{match.player1}}
+          <br>{{match.player3}}
         </div>
         <div class="col-md-2" style="font-weight: bold; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center;">
           VS
         </div>
         <div class="col-md-5" style="font-weight: bold; text-align: left; font-size: 30px;">
-          {{match.player2}}<br>{{match.player4}}
+          {{match.player2}}
+          <br>{{match.player4}}
         </div>
       </div>
       <div *ngFor="let game of match.games">

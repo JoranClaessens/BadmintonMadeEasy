@@ -12,6 +12,11 @@ import { Router } from '@angular/router';
 })
 export class MatchListComponent implements OnInit {
   loggedIn = false;
+  showFilter = false;
+  keyBox = true;
+  nameBox = true;
+  titleBox = true;
+  filterQuery: string;
   selectedMatchTab: number;
   userMatchesCount = 0;
   matches: BadmintonMatch[];
@@ -32,8 +37,10 @@ export class MatchListComponent implements OnInit {
   onMatchTabChanged() {
     if (this.selectedMatchTab === 1) {
       this.loadAllMatches();
+      this.clearFilter();
     } else {
       this.loadUserMatches();
+      this.clearFilter();
     }
   }
 
@@ -67,6 +74,80 @@ export class MatchListComponent implements OnInit {
     }
   }
 
+  filter() {
+    if (this.selectedMatchTab === 1) {
+      this._matchService.getMatches()
+        .subscribe(
+          badmintonMatches => {
+            this.matches = badmintonMatches;
+            this.convertToMinutes();
+            this.filterInput();
+          },
+          error => {
+            this.errorMessage = <any>error;
+          });
+    } else {
+      if (this._userService.getUser()) {
+        this._matchService.getMatchesByUser(this._userService.getUser().id)
+          .subscribe(
+            badmintonMatches => {
+              this.matches = badmintonMatches;
+              this.convertToMinutes();
+              this.filterInput();
+            },
+            error => {
+              this.errorMessage = <any>error;
+            });
+      } else {
+        this.matches = null;
+        this.filterInput();
+      }
+    }
+  }
+
+  filterInput() {
+    const filterMatches = new Array<BadmintonMatch>();
+
+    if (this.keyBox) {
+      for (let i = 0; i < this.matches.length; i++) {
+        if (this.matches[i].id === +this.filterQuery) {
+          if (!filterMatches.includes(this.matches[i])) {
+            filterMatches.push(this.matches[i]);
+          }
+        }
+      }
+    }
+
+    if (this.nameBox) {
+      for (let i = 0; i < this.matches.length; i++) {
+        if ((this.matches[i].player1 && this.matches[i].player1.toLowerCase().includes(this.filterQuery.toLowerCase()))
+          || (this.matches[i].player2 && this.matches[i].player2.toLowerCase().includes(this.filterQuery.toLowerCase()))
+          || (this.matches[i].player3 && this.matches[i].player3.toLowerCase().includes(this.filterQuery.toLowerCase()))
+          || (this.matches[i].player4 && this.matches[i].player4.toLowerCase().includes(this.filterQuery.toLowerCase()))) {
+          if (!filterMatches.includes(this.matches[i])) {
+            filterMatches.push(this.matches[i]);
+          }
+        }
+      }
+    }
+
+    if (this.titleBox) {
+      for (let i = 0; i < this.matches.length; i++) {
+        if (this.matches[i].title.toLowerCase().includes(this.filterQuery.toLowerCase())) {
+          if (!filterMatches.includes(this.matches[i])) {
+            filterMatches.push(this.matches[i]);
+          }
+        }
+      }
+    }
+    this.matches = filterMatches;
+  }
+
+  clearFilter() {
+    this.showFilter = false;
+    this.filterQuery = '';
+  }
+
   createMatch() {
     if (this._userService.getUser()) {
       this._router.navigate(['/matches/create']);
@@ -81,11 +162,15 @@ export class MatchListComponent implements OnInit {
         const eventStartTime = new Date(match.matchCreated);
         const dateNow = new Date();
         let duration = dateNow.valueOf() - eventStartTime.valueOf();
-        duration = Math.floor(duration / (1000 * 60) % 60);
-        if (duration !== 0) {
-          (<any>match).duration = duration;
+        if (duration < 3600000) {
+          duration = Math.floor(duration / (1000 * 60) % 60);
+          if (duration !== 0) {
+            (<any>match).duration = duration;
+          } else {
+            (<any>match).duration = '0';
+          }
         } else {
-          (<any>match).duration = '0';
+          (<any>match).duration = '-1';
         }
       }
     }

@@ -1,28 +1,28 @@
 /* Bottom left text */
 .bottom-left {
     position: absolute;
-    bottom: 30%;
+    bottom: 20%;
     left: 15%;
 }
 
 /* Top left text */
 .top-left {
     position: absolute;
-    top: 30%;
+    top: 52%;
     left: 15%;
 }
 
 /* Top right text */
 .top-right {
     position: absolute;
-    top: 30%;
+    top: 52%;
     right: 15%;
 }
 
 /* Bottom right text */
 .bottom-right {
     position: absolute;
-    bottom: 30%;
+    bottom: 20%;
     right: 15%;
 }
 
@@ -32,4 +32,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.showScrollbar {
+    overflow-y:scroll;
 }
