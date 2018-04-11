@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="match.type === 'MEN_SINGLE' || match.type === 'WOMEN_SINGLE'">
+      <div class="img-container" *ngIf="match.type === 'MEN_SINGLE' || match.type === 'WOMEN_SINGLE'">
         <img [src]="courtImage" style="width: 100%;" />
         <div class="btn-group btn-group-toggle" [ngClass]="{'bottom-left': !match.player1Left, 
                               'top-left': match.player1Left}" (mouseover)="showSwitch1Btn = true" (mouseleave)="showSwitch1Btn = false">
@@ -90,7 +90,7 @@
           </button>
         </div>
       </div>
-      <div *ngIf="match.type !== 'MEN_SINGLE' && match.type !== 'WOMEN_SINGLE'">
+      <div class="img-container" *ngIf="match.type !== 'MEN_SINGLE' && match.type !== 'WOMEN_SINGLE'">
         <img [src]="courtImage" style="width: 100%;" />
         <div class="btn-group btn-group-toggle" [ngClass]="{'bottom-left': !match.player1Left, 
                               'top-left': match.player1Left}" (mouseover)="showSwitch1Btn = true" (mouseleave)="showSwitch1Btn = false">

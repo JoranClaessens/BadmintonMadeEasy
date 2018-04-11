@@ -37,10 +37,8 @@ export class MatchListComponent implements OnInit {
   onMatchTabChanged() {
     if (this.selectedMatchTab === 1) {
       this.loadAllMatches();
-      this.clearFilter();
     } else {
       this.loadUserMatches();
-      this.clearFilter();
     }
   }
 
@@ -143,9 +141,12 @@ export class MatchListComponent implements OnInit {
     this.matches = filterMatches;
   }
 
-  clearFilter() {
-    this.showFilter = false;
+  resetFilter() {
     this.filterQuery = '';
+    this.keyBox = true;
+    this.nameBox = true;
+    this.titleBox = true;
+    this.filter();
   }
 
   createMatch() {

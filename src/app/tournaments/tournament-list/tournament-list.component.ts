@@ -12,6 +12,11 @@ import { Router } from '@angular/router';
 })
 export class TournamentListComponent implements OnInit {
   loggedIn = false;
+  showFilter = false;
+  keyBox = true;
+  nameBox = true;
+  titleBox = true;
+  filterQuery: string;
   selectedTournamentTab: number;
   userTournamentsCount = 0;
   tournaments: Tournament[];
@@ -62,6 +67,67 @@ export class TournamentListComponent implements OnInit {
     } else {
       this.tournaments = null;
     }
+  }
+
+  filter() {
+    if (this.selectedTournamentTab === 1) {
+      this._tournamentService.getTournaments()
+        .subscribe(
+          tournaments => {
+            this.tournaments = tournaments;
+            this.filterInput();
+          },
+          error => {
+            this.errorMessage = <any>error;
+          });
+    } else {
+      if (this._userService.getUser()) {
+        this._tournamentService.getTournamentsByUser(this._userService.getUser().id)
+          .subscribe(
+            tournaments => {
+              this.tournaments = tournaments;
+              this.filterInput();
+            },
+            error => {
+              this.errorMessage = <any>error;
+            });
+      } else {
+        this.tournaments = null;
+        this.filterInput();
+      }
+    }
+  }
+
+  filterInput() {
+    const filterTournaments = new Array<Tournament>();
+
+    if (this.keyBox) {
+      for (let i = 0; i < this.tournaments.length; i++) {
+        if (this.tournaments[i].id === +this.filterQuery) {
+          if (!filterTournaments.includes(this.tournaments[i])) {
+            filterTournaments.push(this.tournaments[i]);
+          }
+        }
+      }
+    }
+
+    if (this.titleBox) {
+      for (let i = 0; i < this.tournaments.length; i++) {
+        if (this.tournaments[i].title.toLowerCase().includes(this.filterQuery.toLowerCase())) {
+          if (!filterTournaments.includes(this.tournaments[i])) {
+            filterTournaments.push(this.tournaments[i]);
+          }
+        }
+      }
+    }
+    this.tournaments = filterTournaments;
+  }
+
+  resetFilter() {
+    this.filterQuery = '';
+    this.keyBox = true;
+    this.titleBox = true;
+    this.filter();
   }
 
   createTournament() {

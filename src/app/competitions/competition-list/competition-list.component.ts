@@ -12,6 +12,11 @@ import { Router } from '@angular/router';
 })
 export class CompetitionListComponent implements OnInit {
   loggedIn = false;
+  showFilter = false;
+  keyBox = true;
+  teamBox = true;
+  titleBox = true;
+  filterQuery: string;
   selectedCompetitionTab: number;
   userCompetitionsCount = 0;
   competitions: Competition[];
@@ -92,6 +97,81 @@ export class CompetitionListComponent implements OnInit {
       (<any>this.competitions[i]).matchesWonTeam1 = matchesWonTeam1;
       (<any>this.competitions[i]).matchesWonTeam2 = matchesWonTeam2;
     }
+  }
+
+  filter() {
+    if (this.selectedCompetitionTab === 1) {
+      this._competitionService.getCompetitions()
+        .subscribe(
+          competitions => {
+            this.competitions = competitions;
+            this.checkMatchWins();
+            this.filterInput();
+          },
+          error => {
+            this.errorMessage = <any>error;
+          });
+    } else {
+      if (this._userService.getUser()) {
+        this._competitionService.getCompetitionsByUser(this._userService.getUser().id)
+          .subscribe(
+            competitions => {
+              this.competitions = competitions;
+              this.checkMatchWins();
+              this.filterInput();
+            },
+            error => {
+              this.errorMessage = <any>error;
+            });
+      } else {
+        this.competitions = null;
+        this.filterInput();
+      }
+    }
+  }
+
+  filterInput() {
+    const filterCompetitions = new Array<Competition>();
+
+    if (this.keyBox) {
+      for (let i = 0; i < this.competitions.length; i++) {
+        if (this.competitions[i].id === +this.filterQuery) {
+          if (!filterCompetitions.includes(this.competitions[i])) {
+            filterCompetitions.push(this.competitions[i]);
+          }
+        }
+      }
+    }
+
+    if (this.teamBox) {
+      for (let i = 0; i < this.competitions.length; i++) {
+        if (this.competitions[i].team1.toLowerCase().includes(this.filterQuery.toLowerCase())
+          || this.competitions[i].team2.toLowerCase().includes(this.filterQuery.toLowerCase())) {
+          if (!filterCompetitions.includes(this.competitions[i])) {
+            filterCompetitions.push(this.competitions[i]);
+          }
+        }
+      }
+    }
+
+    if (this.titleBox) {
+      for (let i = 0; i < this.competitions.length; i++) {
+        if (this.competitions[i].title.toLowerCase().includes(this.filterQuery.toLowerCase())) {
+          if (!filterCompetitions.includes(this.competitions[i])) {
+            filterCompetitions.push(this.competitions[i]);
+          }
+        }
+      }
+    }
+    this.competitions = filterCompetitions;
+  }
+
+  resetFilter() {
+    this.filterQuery = '';
+    this.keyBox = true;
+    this.teamBox = true;
+    this.titleBox = true;
+    this.filter();
   }
 
   createCompetition() {

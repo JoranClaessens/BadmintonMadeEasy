@@ -18,8 +18,31 @@
     </label>
     <button class="btn btn-warning" (click)="createTournament()">
       <i class="fas fa-plus"></i> Toernooi aanmaken</button>
+    <button class="btn btn-link" (click)="showFilter = !showFilter">Filters</button>
   </div>
   <hr class="my-3">
+
+  <div *ngIf="showFilter">
+    <form class="form-inline" style="margin-bottom: 10px;">
+      <input class="form-control" type="text" style="width: 600px; margin-right: 20px;" name="query" placeholder="Zoek op sleutel of titel toernooi..."
+        [(ngModel)]="filterQuery">
+      <button class="btn btn-secondary" style="margin-right: 10px;" type="submit" (click)="filter()">Zoek</button>
+      <button class="btn btn-danger" (click)="resetFilter()">Reset</button>
+    </form>
+    <div class="form-group">
+      <label>Filter op:</label>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="key" [(ngModel)]="keyBox" checked>
+        <label class="custom-control-label" style="margin-left: -20px; vertical-align: middle" for="key">Sleutel</label>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="title" [(ngModel)]="titleBox" checked>
+        <label class="custom-control-label" style="margin-left: -20px; vertical-align: middle" for="title">Titel toernooi</label>
+      </div>
+    </div>
+    <hr class="my-3">
+  </div>
+
   <div *ngIf="!loggedIn && selectedTournamentTab === 2" class="alert alert-warning">
     U moet eerst aangemeld zijn om jouw toernooien te kunnen zien!
     <a [routerLink]="['/account/login']" class="alert-link">Aanmelden</a>
@@ -28,6 +51,9 @@
   </div>
   <div *ngIf="tournaments && tournaments.length < 1" class="alert alert-warning">
     Geen toernooien gevonden!
+  </div>
+  <div *ngIf="tournaments && tournaments.length > 0" class="alert alert-primary">
+    <strong>{{tournaments.length}}</strong> toernooi(en) gevonden!
   </div>
   <div class="list-group">
     <a *ngFor="let tournament of tournaments" class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]="{'list-group-item-primary': tournament.type === 'MEN_SINGLE' || tournament.type === 'MEN_DOUBLE',
